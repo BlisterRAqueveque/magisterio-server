@@ -9,6 +9,9 @@ import { HabitacionEntity } from './habitaciones/entity/habitaciones.entity';
 import { ParcelasService } from './parcelas/parcelas.service';
 import { ParcelasController } from './parcelas/parcelas.controller';
 import { ParcelaEntity } from './parcelas/entity/parcelas.entity';
+import { ReservasController } from './reservas/reservas.controller';
+import { ReservasService } from './reservas/reservas.service';
+import { ReservaEntity } from './reservas/entity/reservas.entity';
 
 @Module({
   imports: [
@@ -16,13 +19,20 @@ import { ParcelaEntity } from './parcelas/entity/parcelas.entity';
       CasaMutualEntity,
       HabitacionEntity,
       ParcelaEntity,
+      ReservaEntity,
     ]),
   ],
-  providers: [CasasMutualesService, HabitacionesService, ParcelasService],
+  providers: [
+    CasasMutualesService,
+    HabitacionesService,
+    ParcelasService,
+    ReservasService,
+  ],
   controllers: [
     CasasMutualesController,
     HabitacionesController,
     ParcelasController,
+    ReservasController,
   ],
 })
 export class CasasModule {}

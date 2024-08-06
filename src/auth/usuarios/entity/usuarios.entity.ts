@@ -1,4 +1,5 @@
 import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-mutuales.entity';
+import { ReservaEntity } from 'src/casas.module/reservas/entity/reservas.entity';
 import { EdicionEntity } from 'src/general.module/ediciones/entity/ediciones.entity';
 import {
   Column,
@@ -43,10 +44,16 @@ export class UsuarioEntity {
   })
   admin: boolean;
 
-  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_usuarios)
-  ediciones: EdicionEntity[];
-
   @JoinColumn({ name: 'casa_mutual' })
   @ManyToOne(() => CasaMutualEntity, (casa_mutual) => casa_mutual.usuarios)
   casa_mutual: CasaMutualEntity;
+
+  @OneToMany(
+    () => ReservaEntity,
+    (reservas_aprovadas) => reservas_aprovadas.usuario_aprobador,
+  )
+  reservas_aprovadas: ReservaEntity[];
+  
+  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_usuarios)
+  ediciones: EdicionEntity[];
 }

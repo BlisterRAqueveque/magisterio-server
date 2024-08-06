@@ -1,6 +1,8 @@
 import { UsuarioEntity } from 'src/auth/usuarios/entity/usuarios.entity';
 import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-mutuales.entity';
 import { HabitacionEntity } from 'src/casas.module/habitaciones/entity/habitaciones.entity';
+import { ParcelaEntity } from 'src/casas.module/parcelas/entity/parcelas.entity';
+import { DelegacionEntity } from 'src/general.module/delegaciones/entity/delegaciones.entity';
 import {
   Column,
   CreateDateColumn,
@@ -39,4 +41,19 @@ export class EdicionEntity {
     (ediciones_habitaciones) => ediciones_habitaciones.ediciones,
   )
   ediciones_habitaciones: HabitacionEntity;
+
+  @JoinColumn({ name: 'ediciones_delegaciones' })
+  @ManyToOne(
+    () => DelegacionEntity,
+    (ediciones_delegaciones) => ediciones_delegaciones.ediciones,
+  )
+  ediciones_delegaciones: DelegacionEntity;
+
+  @JoinColumn({ name: 'ediciones_parcelas' })
+  @ManyToOne(
+    () => ParcelaEntity,
+    (ediciones_parcelas) => ediciones_parcelas.ediciones,
+  )
+  ediciones_parcelas: ParcelaEntity;
+
 }

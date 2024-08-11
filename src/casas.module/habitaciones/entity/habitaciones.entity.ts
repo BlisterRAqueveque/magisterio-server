@@ -25,6 +25,7 @@ export class HabitacionEntity {
   @OneToMany(
     () => EdicionEntity,
     (ediciones) => ediciones.ediciones_habitaciones,
+    { cascade: true },
   )
   ediciones: EdicionEntity[];
 }

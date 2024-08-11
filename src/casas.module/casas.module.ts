@@ -12,6 +12,10 @@ import { ParcelaEntity } from './parcelas/entity/parcelas.entity';
 import { ReservasController } from './reservas/reservas.controller';
 import { ReservasService } from './reservas/reservas.service';
 import { ReservaEntity } from './reservas/entity/reservas.entity';
+import { HorariosController } from './horarios/horarios.controller';
+import { HorariosService } from './horarios/horarios.service';
+import { HorarioEntity } from './horarios/entity/horarios.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -20,19 +24,23 @@ import { ReservaEntity } from './reservas/entity/reservas.entity';
       HabitacionEntity,
       ParcelaEntity,
       ReservaEntity,
+      HorarioEntity,
     ]),
+    AuthModule,
   ],
   providers: [
     CasasMutualesService,
     HabitacionesService,
     ParcelasService,
     ReservasService,
+    HorariosService,
   ],
   controllers: [
     CasasMutualesController,
     HabitacionesController,
     ParcelasController,
     ReservasController,
+    HorariosController,
   ],
 })
 export class CasasModule {}

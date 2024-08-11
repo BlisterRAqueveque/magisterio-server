@@ -39,7 +39,11 @@ export class AppModule {
       .exclude(
         //! Except:
         {
-          path: '/users/auth/login',
+          path: 'usuarios/auth/register',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'usuarios/auth/login',
           method: RequestMethod.POST,
         },
       )

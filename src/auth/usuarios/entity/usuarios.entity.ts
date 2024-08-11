@@ -4,8 +4,11 @@ import { EdicionEntity } from 'src/general.module/ediciones/entity/ediciones.ent
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,8 +16,8 @@ import {
 
 @Entity('usuarios')
 export class UsuarioEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
   @Column({ type: 'varchar', nullable: false, unique: true })
   usuario: string;
   @Column({ type: 'varchar', nullable: true, unique: true })
@@ -44,16 +47,50 @@ export class UsuarioEntity {
   })
   admin: boolean;
 
-  @JoinColumn({ name: 'casa_mutual' })
-  @ManyToOne(() => CasaMutualEntity, (casa_mutual) => casa_mutual.usuarios)
-  casa_mutual: CasaMutualEntity;
+  @Column({ type: 'bool', default: true })
+  activo: boolean;
+
+  @DeleteDateColumn()
+  borrado_el: Date;
+
+  @JoinTable({
+    name: 'usuario_casas_mutual',
+    joinColumn: {
+      name: 'usuario',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'casa_mutual',
+      referencedColumnName: 'id',
+    },
+  })
+  @ManyToMany(() => CasaMutualEntity, (casa_mutual) => casa_mutual.usuarios)
+  casa_mutual: CasaMutualEntity[];
 
   @OneToMany(
     () => ReservaEntity,
     (reservas_aprovadas) => reservas_aprovadas.usuario_aprobador,
   )
   reservas_aprovadas: ReservaEntity[];
-  
-  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_usuarios)
+
+  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_usuarios, {
+    cascade: true,
+  })
   ediciones: EdicionEntity[];
+
+  @JoinColumn({ name: 'creado_por' })
+  @ManyToOne(() => UsuarioEntity, (creado_por) => creado_por.usuarios_creados)
+  creado_por: UsuarioEntity;
+
+  @OneToMany(
+    () => CasaMutualEntity,
+    (carga_casa_mutual) => carga_casa_mutual.creado_por,
+  )
+  carga_casa_mutual: CasaMutualEntity[];
+
+  @OneToMany(
+    () => UsuarioEntity,
+    (usuarios_creados) => usuarios_creados.creado_por,
+  )
+  usuarios_creados: UsuarioEntity[];
 }

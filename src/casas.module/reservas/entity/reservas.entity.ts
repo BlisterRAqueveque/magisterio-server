@@ -24,6 +24,11 @@ export class ReservaEntity {
   @Column({ type: 'varchar', nullable: false })
   correo: string;
 
+  @Column({ type: 'datetime', nullable: false })
+  desde: Date;
+  @Column({ type: 'datetime', nullable: false })
+  hasta: Date;
+
   @CreateDateColumn()
   fecha_creado: Date;
 

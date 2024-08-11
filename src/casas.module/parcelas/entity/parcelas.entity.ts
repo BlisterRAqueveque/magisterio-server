@@ -20,6 +20,8 @@ export class ParcelaEntity {
   @ManyToOne(() => CasaMutualEntity, (casa_mutual) => casa_mutual.parcelas)
   casa_mutual: CasaMutualEntity;
 
-  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_parcelas)
+  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_parcelas, {
+    cascade: true,
+  })
   ediciones: EdicionEntity[];
 }

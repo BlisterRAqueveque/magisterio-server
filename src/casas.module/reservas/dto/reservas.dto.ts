@@ -9,6 +9,9 @@ export class ReservaDto {
   tel: string;
   correo: string;
 
+  desde: Date;
+  hasta: Date;
+
   aprobado: boolean;
 
   fecha_creado: Date;

@@ -1,4 +1,5 @@
 import { CasaMutualDto } from 'src/casas.module/casas-mutuales/dto/casas-mutuales.dto';
+import { HabitacionDto } from 'src/casas.module/habitaciones/dto/habitaciones.dto';
 import { ReservaDto } from 'src/casas.module/reservas/dto/reservas.dto';
 import { EdicionDto } from 'src/general.module/ediciones/dto/ediciones.dto';
 
@@ -25,5 +26,6 @@ export class UsuarioDto {
 
   carga_casa_mutual: CasaMutualDto[];
 
+  habitaciones: HabitacionDto[];
   usuarios_creados: UsuarioDto[];
 }

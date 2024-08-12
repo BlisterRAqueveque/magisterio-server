@@ -1,4 +1,82 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+  Headers,
+  Res,
+} from '@nestjs/common';
+import { HabitacionesService } from './habitaciones.service';
+import { HabitacionDto } from './dto/habitaciones.dto';
+import { Response } from 'express';
 
 @Controller('habitaciones')
-export class HabitacionesController {}
+export class HabitacionesController {
+  constructor(private readonly service: HabitacionesService) {}
+
+  @Post()
+  async insert(@Body() data: HabitacionDto, @Res() res: Response) {
+    const result = await this.service.insert(data);
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+  }
+
+  @Get()
+  async getAllFilter(
+    @Query('id') id: number,
+    @Query('nombre') nombre: string,
+    @Query('page') page: number,
+    @Query('perPage') perPage: number,
+    @Query('sortBy') sortBy: string,
+    @Res() res: Response,
+  ) {
+    const result = await this.service.getAllFilter(
+      id,
+      nombre,
+      page,
+      perPage,
+      sortBy,
+    );
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
+  }
+
+  @Get('entities/deletes')
+  async getDeletes(@Res() res: Response) {
+    const result = await this.service.getDeletes();
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
+  }
+
+  @Put('entities/deletes/:id')
+  async restoreDelete(
+    @Param('id') id: number,
+    @Body() data: HabitacionDto,
+    @Res() res: Response,
+  ) {
+    const result = await this.service.restoreDelete(id, data);
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
+  }
+
+  @Put(':id')
+  async update(
+    @Body() data: Partial<HabitacionDto>,
+    @Param('id') id: number,
+    @Res() res: Response,
+  ) {
+    const result = await this.service.update(data, id);
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+  }
+
+  @Delete(':id')
+  async softDelete(
+    @Headers('authorization') token: string,
+    @Param('id') id: number,
+    @Res() res: Response,
+  ) {
+    const result = await this.service.softDelete(id, token);
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+  }
+}

@@ -69,7 +69,7 @@ export class CasasMutualesService {
         take: perPage,
         order: {
           id: sortBy === 'ASC' ? 'ASC' : sortBy === 'DESC' ? 'DESC' : 'DESC',
-          ediciones: { fecha_editado: 'ASC' },
+          //ediciones: { fecha_editado: 'ASC' },
         },
         relations: { usuarios: true, creado_por: true, ediciones: true },
         select: {
@@ -77,6 +77,38 @@ export class CasasMutualesService {
         },
       });
       return { result, count };
+
+      //! Creando contenido de prueba
+      // const query = this.repo
+      //   .createQueryBuilder('casa_mutual')
+      //   .leftJoinAndSelect('casa_mutual.usuarios', 'usuarios')
+      //   .leftJoinAndSelect('casa_mutual.creado_por', 'creado_por')
+      //   .leftJoinAndSelect('casa_mutual.ediciones', 'ediciones');
+
+      // if (id) {
+      //   query.andWhere('casa_mutual.id = :id', { id });
+      // }
+
+      // if (nombre) {
+      //   query.andWhere('casa_mutual.nombre LIKE :nombre', {
+      //     nombre: `%${nombre}%`,
+      //   });
+      // }
+
+      // if (sortBy) {
+      //   query.orderBy(
+      //     'casa_mutual.id',
+      //     sortBy.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+      //   );
+      //   query.addOrderBy('ediciones.fecha_editado', 'ASC');
+      // }
+
+      // query.skip(page !== undefined ? (page - 1) * perPage : 0);
+      // query.take(perPage);
+
+      // const [result, count] = await query.getManyAndCount();
+
+      // return { result, count };
     } catch (e: any) {
       console.error(e);
       throw new HttpException(e.message, e.status);

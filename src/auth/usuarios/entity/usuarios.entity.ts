@@ -1,4 +1,5 @@
 import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-mutuales.entity';
+import { HabitacionEntity } from 'src/casas.module/habitaciones/entity/habitaciones.entity';
 import { ReservaEntity } from 'src/casas.module/reservas/entity/reservas.entity';
 import { EdicionEntity } from 'src/general.module/ediciones/entity/ediciones.entity';
 import {
@@ -93,4 +94,7 @@ export class UsuarioEntity {
     (usuarios_creados) => usuarios_creados.creado_por,
   )
   usuarios_creados: UsuarioEntity[];
+
+  @OneToMany(() => HabitacionEntity, (habitaciones) => habitaciones.creado_por)
+  habitaciones: HabitacionEntity[];
 }

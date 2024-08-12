@@ -196,11 +196,75 @@ export class UsuariosService {
         take: perPage,
         order: {
           id: sortBy === 'ASC' ? 'ASC' : sortBy === 'DESC' ? 'DESC' : 'DESC',
-          ediciones: { fecha_editado: 'ASC' },
+          // ediciones: { fecha_editado: 'ASC' },
         },
         relations: { casa_mutual: true, creado_por: true, ediciones: true },
       });
       return { result, count };
+
+      //! Creando contenido de prueba
+      // const query = this.repo
+      //   .createQueryBuilder('usuario')
+      //   .leftJoinAndSelect('usuario.casa_mutual', 'casa_mutual')
+      //   .leftJoinAndSelect('usuario.creado_por', 'creado_por')
+      //   .leftJoinAndSelect('usuario.ediciones', 'ediciones');
+
+      // if (id) {
+      //   query.andWhere('usuario.id = :id', { id });
+      // }
+
+      // if (usuario) {
+      //   query.andWhere('usuario.usuario LIKE :usuario', {
+      //     usuario: `%${usuario}%`,
+      //   });
+      // }
+
+      // if (correo) {
+      //   query.andWhere('usuario.correo LIKE :correo', {
+      //     correo: `%${correo}%`,
+      //   });
+      // }
+
+      // if (nombre_completo) {
+      //   query.andWhere('usuario.nombre_completo LIKE :nombre_completo', {
+      //     nombre_completo: `%${nombre_completo}%`,
+      //   });
+      // }
+
+      // if (casa_mutual) {
+      //   query.andWhere(
+      //     'casa_mutual.id = :casa_mutualId OR casa_mutual.nombre LIKE :casa_mutualNombre',
+      //     {
+      //       casa_mutualId: +casa_mutual,
+      //       casa_mutualNombre: `%${casa_mutual}%`,
+      //     },
+      //   );
+      // }
+
+      // if (usuario_creador) {
+      //   query.andWhere(
+      //     'creado_por.id = :creadorId OR creado_por.nombre_completo LIKE :creadorNombre',
+      //     {
+      //       creadorId: +usuario_creador,
+      //       creadorNombre: `%${usuario_creador}%`,
+      //     },
+      //   );
+      // }
+
+      // if (sortBy) {
+      //   query.orderBy(
+      //     'usuario.id',
+      //     sortBy.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+      //   );
+      //   query.addOrderBy('ediciones.fecha_editado', 'ASC');
+      // }
+
+      // query.skip(page !== undefined ? (page - 1) * perPage : 0);
+      // query.take(perPage);
+
+      // const [result, count] = await query.getManyAndCount();
+
+      // return { result, count };
     } catch (e: any) {
       console.error(e);
       throw new HttpException(e.message, e.status);

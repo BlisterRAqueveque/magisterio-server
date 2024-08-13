@@ -1,4 +1,6 @@
 import { UsuarioEntity } from 'src/auth/usuarios/entity/usuarios.entity';
+import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-mutuales.entity';
+import { HabitacionEntity } from 'src/casas.module/habitaciones/entity/habitaciones.entity';
 import { DelegacionEntity } from 'src/general.module/delegaciones/entity/delegaciones.entity';
 import {
   Column,
@@ -32,8 +34,12 @@ export class ReservaEntity {
   @CreateDateColumn()
   fecha_creado: Date;
 
-  @Column({ type: 'bool', default: false })
-  aprobado: boolean;
+  @Column({
+    type: 'int',
+    default: 0,
+    comment: '0: Pendiente | 1: Aprobado | -1: Desaprobado',
+  })
+  estado: number;
   @Column({ type: 'datetime', nullable: true })
   fecha_aprobado: Date;
 
@@ -44,7 +50,12 @@ export class ReservaEntity {
   )
   usuario_aprobador: UsuarioEntity;
 
+  //! LAS DELEGACIONES, RESERVAN? O TODO VA A LA CASA MUTUAL?
   @JoinColumn({ name: 'delegacion' })
   @ManyToOne(() => DelegacionEntity, (delegacion) => delegacion.reservas)
   delegacion: DelegacionEntity;
+
+  @JoinColumn({ name: 'habitacion' })
+  @ManyToOne(() => HabitacionEntity, (habitacion) => habitacion.reservas)
+  habitacion: HabitacionEntity;
 }

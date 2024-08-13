@@ -1,5 +1,6 @@
 import { UsuarioEntity } from 'src/auth/usuarios/entity/usuarios.entity';
 import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-mutuales.entity';
+import { ReservaEntity } from 'src/casas.module/reservas/entity/reservas.entity';
 import { EdicionEntity } from 'src/general.module/ediciones/entity/ediciones.entity';
 import {
   Column,
@@ -40,4 +41,7 @@ export class HabitacionEntity {
 
   @ManyToOne(() => UsuarioEntity, (creado_por) => creado_por.habitaciones)
   creado_por: UsuarioEntity;
+
+  @OneToMany(() => ReservaEntity, (reservas) => reservas.habitacion)
+  reservas: ReservaEntity[];
 }

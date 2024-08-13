@@ -1,5 +1,6 @@
 import { UsuarioDto } from 'src/auth/usuarios/dto/usuarios.dto';
 import { CasaMutualDto } from 'src/casas.module/casas-mutuales/dto/casas-mutuales.dto';
+import { ReservaDto } from 'src/casas.module/reservas/dto/reservas.dto';
 import { EdicionDto } from 'src/general.module/ediciones/dto/ediciones.dto';
 
 export class HabitacionDto {
@@ -11,6 +12,10 @@ export class HabitacionDto {
   fecha_creado: Date;
 
   casa_mutual: CasaMutualDto;
-  creado_por: UsuarioDto;
+
   ediciones: EdicionDto[];
+
+  creado_por: UsuarioDto;
+
+  reservas: ReservaDto[];
 }

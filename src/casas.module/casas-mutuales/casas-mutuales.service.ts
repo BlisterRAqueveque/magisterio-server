@@ -71,7 +71,12 @@ export class CasasMutualesService {
           id: sortBy === 'ASC' ? 'ASC' : sortBy === 'DESC' ? 'DESC' : 'DESC',
           //ediciones: { fecha_editado: 'ASC' },
         },
-        relations: { usuarios: true, creado_por: true, ediciones: true },
+        relations: {
+          usuarios: true,
+          creado_por: true,
+          ediciones: true,
+          horarios: true,
+        },
         select: {
           creado_por: { nombre_completo: true },
         },

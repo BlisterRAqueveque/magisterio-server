@@ -1,4 +1,5 @@
 import { UsuarioDto } from 'src/auth/usuarios/dto/usuarios.dto';
+import { HabitacionDto } from 'src/casas.module/habitaciones/dto/habitaciones.dto';
 import { DelegacionDto } from 'src/general.module/delegaciones/dto/delegaciones.dto';
 
 export class ReservaDto {
@@ -12,7 +13,7 @@ export class ReservaDto {
   desde: Date;
   hasta: Date;
 
-  aprobado: boolean;
+  estado: number;
 
   fecha_creado: Date;
   fecha_aprobado: Date;
@@ -20,4 +21,5 @@ export class ReservaDto {
   usuario_aprobador: UsuarioDto;
 
   delegacion: DelegacionDto;
+  habitacion: HabitacionDto;
 }

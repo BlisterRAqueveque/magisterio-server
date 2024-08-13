@@ -1,5 +1,6 @@
 import { CasaMutualDto } from 'src/casas.module/casas-mutuales/dto/casas-mutuales.dto';
 import { HabitacionDto } from 'src/casas.module/habitaciones/dto/habitaciones.dto';
+import { ParcelaDto } from 'src/casas.module/parcelas/dto/parcelas.dto';
 import { ReservaDto } from 'src/casas.module/reservas/dto/reservas.dto';
 import { EdicionDto } from 'src/general.module/ediciones/dto/ediciones.dto';
 
@@ -13,7 +14,13 @@ export class UsuarioDto {
   clave: string;
   fecha_creado: Date;
   primer_login: Date;
+
+  superadmin: boolean;
+
+  admin: boolean;
+
   activo: boolean;
+
   borrado_el: Date;
 
   casa_mutual: CasaMutualDto[];
@@ -26,6 +33,9 @@ export class UsuarioDto {
 
   carga_casa_mutual: CasaMutualDto[];
 
-  habitaciones: HabitacionDto[];
   usuarios_creados: UsuarioDto[];
+
+  habitaciones: HabitacionDto[];
+
+  parcelas: ParcelaDto[];
 }

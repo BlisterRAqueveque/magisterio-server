@@ -11,17 +11,22 @@ export class CasaMutualDto {
   direccion: string;
   tel: string;
   cel: string;
+  correo: string;
   cp: number;
   fecha_creado: Date;
-  creado_por: UsuarioDto;
-
   activo: boolean;
+
   borrado_el: Date;
 
+  creado_por: UsuarioDto;
+
   usuarios: UsuarioDto[];
+
   habitaciones: HabitacionDto[];
+
   parcelas: ParcelaDto[];
-  horarios: HorarioDto[];
+
+  horarios: HorarioDto;
 
   ediciones: EdicionDto[];
 }

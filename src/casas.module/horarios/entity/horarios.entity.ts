@@ -8,9 +8,8 @@ import { CasaMutualEntity } from 'src/casas.module/casas-mutuales/entity/casas-m
 import {
   Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity('horarios')
@@ -18,13 +17,12 @@ export class HorarioEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   inicio_periodo: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   fin_periodo: Date;
 
-  @JoinColumn({ name: 'casa_mutual' })
-  @ManyToOne(() => CasaMutualEntity, (casa_mutual) => casa_mutual.horarios)
+  @OneToOne(() => CasaMutualEntity, (casa_mutual) => casa_mutual.horarios)
   casa_mutual: CasaMutualEntity;
 }

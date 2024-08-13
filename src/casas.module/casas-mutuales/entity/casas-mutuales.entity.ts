@@ -8,9 +8,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -52,8 +54,11 @@ export class CasaMutualEntity {
   @OneToMany(() => ParcelaEntity, (parcelas) => parcelas.casa_mutual)
   parcelas: ParcelaEntity[];
 
-  @OneToMany(() => HorarioEntity, (horarios) => horarios.casa_mutual)
-  horarios: HorarioEntity[];
+  @OneToOne(() => HorarioEntity, (horarios) => horarios.casa_mutual, {
+    cascade: true,
+  })
+  @JoinColumn()
+  horarios: HorarioEntity;
 
   @OneToMany(
     () => EdicionEntity,

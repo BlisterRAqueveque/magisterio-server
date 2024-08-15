@@ -183,4 +183,22 @@ export class CasasMutualesService {
       throw new HttpException(e.message, e.status);
     }
   }
+
+  //! APP METHODS ------------------------------------------------------------>
+  async getCasasMutualesAndHabitaciones() {
+    try {
+      const result = await this.repo.find({
+        where: {
+          activo: true,
+          habitaciones: [{ activo: IsNull() }, { activo: true }],
+        },
+        relations: { habitaciones: true },
+      });
+      return result;
+    } catch (e: any) {
+      console.error(e);
+      throw new HttpException(e.message, e.status);
+    }
+  }
+  //! APP METHODS ------------------------------------------------------------>
 }

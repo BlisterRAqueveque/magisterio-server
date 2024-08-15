@@ -46,6 +46,18 @@ export class AppModule {
           path: 'usuarios/auth/login',
           method: RequestMethod.POST,
         },
+        {
+          path: 'casas-mutuales/get-all/habitaciones',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'reservas/room/:id',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'reservas',
+          method: RequestMethod.POST,
+        },
       )
       .forRoutes('');
   }

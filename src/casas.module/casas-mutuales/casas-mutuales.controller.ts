@@ -79,4 +79,12 @@ export class CasasMutualesController {
     const result = await this.service.softDelete(id, token);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }
+
+  //! APP METHODS ------------------------------------------------------------>
+  @Get('get-all/habitaciones')
+  async getCasasMutualesAndHabitaciones(@Res() res: Response) {
+    const result = await this.service.getCasasMutualesAndHabitaciones();
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+  }
+  //! APP METHODS ------------------------------------------------------------>
 }

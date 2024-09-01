@@ -46,9 +46,14 @@ export class ParcelasService {
     try {
       const entity = await this.repo.findOne({
         where: { id },
-        relations: { ediciones: true },
+        relations: { ediciones: true, ingresos: true },
       });
       if (!entity) throw new NotFoundException('Entity not found');
+      if (data.activo === false) {
+        entity.ingresos.forEach((i) => {
+          if (i.salida_fecha === null) i.salida_fecha = new Date();
+        });
+      }
       const merge = await this.repo.merge(entity, data);
       const result = await this.repo.save(merge);
       return result;
@@ -112,7 +117,11 @@ export class ParcelasService {
       //* Buscamos la entidad para hacer merge
       const entity = await this.repo.findOne({
         where: { id },
-        relations: { ediciones: true },
+        relations: { ediciones: true, ingresos: true },
+      });
+
+      entity.ingresos.forEach((i) => {
+        if (i.salida_fecha === null) i.salida_fecha = new Date();
       });
 
       entity.ediciones.push({

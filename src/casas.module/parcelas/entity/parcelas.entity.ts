@@ -39,6 +39,8 @@ export class ParcelaEntity {
   })
   ediciones: EdicionEntity[];
 
-  @OneToMany(() => IngresoParcelaEntity, (ingresos) => ingresos.parcela)
+  @OneToMany(() => IngresoParcelaEntity, (ingresos) => ingresos.parcela, {
+    cascade: true,
+  })
   ingresos: IngresoParcelaEntity[];
 }

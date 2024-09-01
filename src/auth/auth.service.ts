@@ -46,25 +46,6 @@ export class AuthService {
   }
 
   /**
-   * @param user find user from database
-   * @returns generated jwt
-   */
-  async generateJwtEvaluation(body: any, seconds: number): Promise<string> {
-    /**
-     * @return: user.id, user.nickname
-     * @description This params are for navigational permissions inside the API.
-     *              Destructuring the token, gets the information.
-     */
-    const payload = {
-      body,
-    };
-    const options: JwtSignOptions = {
-      expiresIn: seconds,
-    };
-    return this.jwtService.signAsync(payload, options);
-  }
-
-  /**
    * @param password new user's password
    * @returns hashed password
    */
@@ -91,7 +72,11 @@ export class AuthService {
    * @returns boolean
    */
   async verifyJwt(jwt: string): Promise<any> {
-    return await this.jwtService.verifyAsync(jwt);
+    try {
+      return await this.jwtService.verifyAsync(jwt);
+    } catch (error) {
+      return null;
+    }
   }
 
   /**

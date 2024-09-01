@@ -84,6 +84,7 @@ export class ParcelasService {
           creado_por: true,
           ediciones: true,
           casa_mutual: true,
+          ingresos: true,
         },
         select: {
           creado_por: { nombre_completo: true },

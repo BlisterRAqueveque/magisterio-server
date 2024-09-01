@@ -20,6 +20,8 @@ import { ParcelasService } from './parcelas/parcelas.service';
 import { ReservaEntity } from './reservas/entity/reservas.entity';
 import { ReservasController } from './reservas/reservas.controller';
 import { ReservasService } from './reservas/reservas.service';
+import { ParcelasGateway } from './socket.io/parcelas.gateway';
+import { ParcelasEventEmitter } from './socket.io/event-emitter.service';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ReservasService } from './reservas/reservas.service';
     HorariosService,
     IngresoParcelasService,
     Mailer,
+    ParcelasGateway,
+    ParcelasEventEmitter,
   ],
   controllers: [
     CasasMutualesController,

@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IngresoParcelaEntity } from './entities/ingreso-parcela.entity';
+import { ParcelasEventEmitter } from '../socket.io/event-emitter.service';
 
 @Injectable()
 export class IngresoParcelasService {
@@ -21,13 +22,16 @@ export class IngresoParcelasService {
   constructor(
     @InjectRepository(IngresoParcelaEntity)
     private readonly repo: Repository<IngresoParcelaDto>,
+    private readonly eventEmitter: ParcelasEventEmitter,
   ) {}
 
   async create(createIngresoParcelaDto: IngresoParcelaDto) {
     try {
       if (!createIngresoParcelaDto.n_socio)
         throw new UnauthorizedException('Faltan datos');
-      const result = await this.repo.save(createIngresoParcelaDto);
+      const entity = await this.repo.save(createIngresoParcelaDto);
+      const result = await this.findOne(entity.id);
+      this.eventEmitter.newIngreso(result);
       return result;
     } catch (err: any) {
       this.logger.error(err);
@@ -66,7 +70,10 @@ export class IngresoParcelasService {
 
   async findOne(id: number) {
     try {
-      const result = await this.repo.findOne({ where: { id } });
+      const result = await this.repo.findOne({
+        where: { id },
+        relations: { parcela: true },
+      });
       if (!result) throw new NotFoundException('Not found');
       return result;
     } catch (err: any) {
@@ -85,6 +92,7 @@ export class IngresoParcelasService {
           n_socio: updateIngresoParcelaDto.n_socio,
           salida_fecha: IsNull(),
         },
+        relations: { parcela: true },
         order: { salida_fecha: 'DESC' },
         take: 1,
       });
@@ -93,6 +101,9 @@ export class IngresoParcelasService {
 
       const merge = await this.repo.merge(entity[0], updateIngresoParcelaDto);
       const result = await this.repo.save(merge);
+
+      this.eventEmitter.updateIngreso(result);
+
       return result;
     } catch (err: any) {
       this.logger.error(err);

@@ -15,6 +15,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { IngresoParcelaEntity } from './entities/ingreso-parcela.entity';
 import { ParcelasEventEmitter } from '../socket.io/event-emitter.service';
+import { Paginator } from 'src/common';
 
 @Injectable()
 export class IngresoParcelasService {
@@ -41,8 +42,9 @@ export class IngresoParcelasService {
     }
   }
 
-  async findAll(page: number, perPage: number, sortBy: string) {
+  async findAll(paginator: Paginator) {
     try {
+      const { page, perPage, sortBy } = paginator;
       const conditions: FindOptionsWhere<IngresoParcelaDto> = {};
 
       const [result, count] = await this.repo.findAndCount({

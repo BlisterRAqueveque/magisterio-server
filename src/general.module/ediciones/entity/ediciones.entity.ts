@@ -1,3 +1,4 @@
+import { NoticiaEntity } from 'src/web-services/noticias/entity/noticias.entity';
 import { UsuarioEntity } from '../../../auth/usuarios/entity/usuarios.entity';
 import { CasaMutualEntity } from '../../../casas.module/casas-mutuales/entity/casas-mutuales.entity';
 import { HabitacionEntity } from '../../../casas.module/habitaciones/entity/habitaciones.entity';
@@ -56,4 +57,10 @@ export class EdicionEntity {
   )
   ediciones_parcelas: ParcelaEntity;
 
+  @JoinColumn({ name: 'ediciones_noticias' })
+  @ManyToOne(
+    () => NoticiaEntity,
+    (ediciones_noticias) => ediciones_noticias.ediciones,
+  )
+  ediciones_noticias: NoticiaEntity;
 }

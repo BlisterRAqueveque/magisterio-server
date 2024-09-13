@@ -61,6 +61,7 @@ export class ParcelasGateway
       this.sockets.push(socket);
     } catch (e: any) {
       console.error(new Date(), e);
+      return socket.disconnect();
     }
   }
   /**

@@ -4,7 +4,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -17,9 +17,10 @@ import {
   Repository,
 } from 'typeorm';
 import { Mailer } from '../../helpers';
-import { formatDate } from '../../tools/dates';
 import { ReservaDto } from './dto/reservas.dto';
 import { ReservaEntity } from './entity/reservas.entity';
+import { formatDate } from '../../tools';
+import { ReservaPaginator } from './dto/reservas.paginator.dto';
 
 @Injectable()
 export class ReservasService {
@@ -49,22 +50,24 @@ export class ReservasService {
     }
   }
 
-  async getAllFilter(
-    desde: string,
-    hasta: string,
-    nombre: string,
-    n_socio: string,
-    correo: string,
-    estado: number,
-    fecha_creado: string,
-    usuario_aprobador: string,
-    casa_mutual: string,
-    delegacion: string,
-    page: number,
-    perPage: number,
-    sortBy: string,
-  ) {
+  async getAllFilter(paginator: ReservaPaginator) {
     try {
+      const {
+        desde,
+        hasta,
+        nombre,
+        n_socio,
+        correo,
+        estado,
+        fecha_creado,
+        usuario_aprobador,
+        casa_mutual,
+        delegacion,
+        page,
+        perPage,
+        sortBy,
+      } = paginator;
+      
       const condition: FindOptionsWhere<ReservaDto> = {};
       const conditions: FindOptionsWhere<ReservaDto>[] = [];
 

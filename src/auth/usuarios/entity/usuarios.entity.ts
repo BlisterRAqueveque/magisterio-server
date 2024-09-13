@@ -16,6 +16,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { NoticiaEntity } from 'src/web-services/noticias/entity/noticias.entity';
 
 @Entity('usuarios')
 export class UsuarioEntity {
@@ -108,4 +109,7 @@ export class UsuarioEntity {
     (ingreso_parcelas) => ingreso_parcelas.cerrado_por,
   )
   ingreso_parcelas: IngresoParcelaEntity[];
+
+  @OneToMany(() => NoticiaEntity, (noticias) => noticias.creado_por)
+  noticias: NoticiaEntity[];
 }

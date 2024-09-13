@@ -19,6 +19,7 @@ import {
   IsNull,
   QueryFailedError,
 } from 'typeorm';
+import { Paginator } from 'src/common';
 
 @Injectable()
 export class ParcelasService {
@@ -65,14 +66,10 @@ export class ParcelasService {
     }
   }
 
-  async getAllFilter(
-    id: number,
-    nombre: string,
-    page: number,
-    perPage: number,
-    sortBy: string,
-  ) {
+  async getAllFilter(paginator: Paginator) {
     try {
+      const { id, nombre, page, perPage, sortBy } = paginator;
+
       const conditions: FindOptionsWhere<ParcelaDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);

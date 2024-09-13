@@ -14,6 +14,7 @@ import {
 import { HabitacionesService } from './habitaciones.service';
 import { HabitacionDto } from './dto/habitaciones.dto';
 import { Response } from 'express';
+import { Paginator } from 'src/common';
 
 @Controller('habitaciones')
 export class HabitacionesController {
@@ -26,21 +27,8 @@ export class HabitacionesController {
   }
 
   @Get()
-  async getAllFilter(
-    @Query('id') id: number,
-    @Query('nombre') nombre: string,
-    @Query('page') page: number,
-    @Query('perPage') perPage: number,
-    @Query('sortBy') sortBy: string,
-    @Res() res: Response,
-  ) {
-    const result = await this.service.getAllFilter(
-      id,
-      nombre,
-      page,
-      perPage,
-      sortBy,
-    );
+  async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
+    const result = await this.service.getAllFilter(paginator);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 

@@ -4,6 +4,7 @@ import { HabitacionDto } from '../../../casas.module/habitaciones/dto/habitacion
 import { ParcelaDto } from '../../../casas.module/parcelas/dto/parcelas.dto';
 import { ReservaDto } from '../../../casas.module/reservas/dto/reservas.dto';
 import { EdicionDto } from '../../../general.module/ediciones/dto/ediciones.dto';
+import { NoticiaDto } from 'src/web-services/noticias/dto/noticias.dto';
 
 export class UsuarioDto {
   id: number;
@@ -41,4 +42,6 @@ export class UsuarioDto {
   parcelas: ParcelaDto[];
 
   ingreso_parcelas: IngresoParcelaDto[];
+
+  noticias: NoticiaDto[];
 }

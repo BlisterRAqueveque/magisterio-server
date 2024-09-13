@@ -11,6 +11,7 @@ import { GeneralModule } from './general.module/general.module';
 import { AuthMiddleware } from './middlewares/auth';
 import { saveImagesToStorage } from './middlewares/image-storage';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { WebServicesModule } from './web-services/web-services.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     CasasModule,
     GeneralModule,
+    WebServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

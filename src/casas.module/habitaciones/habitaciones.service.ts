@@ -19,6 +19,7 @@ import {
 } from 'typeorm';
 import { UsuariosService } from '../../auth/usuarios/usuarios.service';
 import { AuthService } from '../../auth/auth.service';
+import { Paginator } from 'src/common';
 
 @Injectable()
 export class HabitacionesService {
@@ -60,14 +61,10 @@ export class HabitacionesService {
     }
   }
 
-  async getAllFilter(
-    id: number,
-    nombre: string,
-    page: number,
-    perPage: number,
-    sortBy: string,
-  ) {
+  async getAllFilter(paginator: Paginator) {
     try {
+      const { id, nombre, page, perPage, sortBy } = paginator;
+
       const conditions: FindOptionsWhere<HabitacionDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);

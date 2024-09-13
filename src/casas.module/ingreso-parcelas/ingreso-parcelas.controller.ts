@@ -13,6 +13,7 @@ import {
 import { Response } from 'express';
 import { IngresoParcelaDto } from './dto/ingreso-parcela.dto';
 import { IngresoParcelasService } from './ingreso-parcelas.service';
+import { Paginator } from 'src/common';
 
 @Controller('ingreso-parcelas')
 export class IngresoParcelasController {
@@ -28,13 +29,8 @@ export class IngresoParcelasController {
   }
 
   @Get()
-  async findAll(
-    @Query('page') page: number,
-    @Query('perPage') perPage: number,
-    @Query('sortBy') sortBy: string,
-    @Res() res: Response,
-  ) {
-    const result = await this.service.findAll(page, perPage, sortBy);
+  async findAll(@Query() paginator: Paginator, @Res() res: Response) {
+    const result = await this.service.findAll(paginator);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }
 

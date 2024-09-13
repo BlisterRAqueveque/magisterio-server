@@ -3,33 +3,34 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpStatus,
   Param,
   Post,
   Put,
   Query,
   Res,
-  Headers,
-  ParseIntPipe,
 } from '@nestjs/common';
-import { ParcelasService } from './parcelas.service';
-import { ParcelaDto } from './dto/parcelas.dto';
+import { NoticiasService } from './noticias.service';
+import { NoticiaDto } from './dto/noticias.dto';
 import { Response } from 'express';
 import { Paginator } from 'src/common';
 
-@Controller('parcelas')
-export class ParcelasController {
-  constructor(private readonly service: ParcelasService) {}
+@Controller('noticias')
+export class NoticiasController {
+  constructor(private readonly service: NoticiasService) {}
 
   @Post()
-  async insert(@Body() data: ParcelaDto, @Res() res: Response) {
+  async insert(@Body() data: NoticiaDto, @Res() res: Response) {
     const result = await this.service.insert(data);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }
 
   @Get()
   async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
+    
     const result = await this.service.getAllFilter(paginator);
+
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 
@@ -42,7 +43,7 @@ export class ParcelasController {
   @Put('entities/deletes/:id')
   async restoreDelete(
     @Param('id') id: number,
-    @Body() data: ParcelaDto,
+    @Body() data: NoticiaDto,
     @Res() res: Response,
   ) {
     const result = await this.service.restoreDelete(id, data);
@@ -51,7 +52,7 @@ export class ParcelasController {
 
   @Put(':id')
   async update(
-    @Body() data: Partial<ParcelaDto>,
+    @Body() data: Partial<NoticiaDto>,
     @Param('id') id: number,
     @Res() res: Response,
   ) {

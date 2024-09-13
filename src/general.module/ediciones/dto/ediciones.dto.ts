@@ -1,3 +1,4 @@
+import { NoticiaDto } from 'src/web-services/noticias/dto/noticias.dto';
 import { UsuarioDto } from '../../../auth/usuarios/dto/usuarios.dto';
 import { CasaMutualDto } from '../../../casas.module/casas-mutuales/dto/casas-mutuales.dto';
 import { HabitacionDto } from '../../../casas.module/habitaciones/dto/habitaciones.dto';
@@ -18,4 +19,6 @@ export class EdicionDto {
   ediciones_delegaciones: DelegacionDto;
 
   ediciones_parcelas: ParcelaDto;
+
+  ediciones_noticias: NoticiaDto;
 }

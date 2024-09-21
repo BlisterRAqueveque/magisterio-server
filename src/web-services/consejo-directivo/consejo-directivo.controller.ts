@@ -3,25 +3,25 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpStatus,
   Param,
   Post,
   Put,
   Query,
-  Headers,
   Res,
 } from '@nestjs/common';
-import { HabitacionesService } from './habitaciones.service';
-import { HabitacionDto } from './dto/habitaciones.dto';
+import { ConsejoDirectivoService } from './consejo-directivo.service';
+import { ConsejoDirectivoDto } from './dto/consejo-directivo.dto';
 import { Response } from 'express';
 import { Paginator } from '@/common';
 
-@Controller('habitaciones')
-export class HabitacionesController {
-  constructor(private readonly service: HabitacionesService) {}
+@Controller('consejo-directivo')
+export class ConsejoDirectivoController {
+  constructor(private readonly service: ConsejoDirectivoService) {}
 
   @Post()
-  async insert(@Body() data: HabitacionDto, @Res() res: Response) {
+  async insert(@Body() data: ConsejoDirectivoDto, @Res() res: Response) {
     const result = await this.service.insert(data);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }
@@ -29,6 +29,7 @@ export class HabitacionesController {
   @Get()
   async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
     const result = await this.service.getAllFilter(paginator);
+
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 
@@ -41,7 +42,7 @@ export class HabitacionesController {
   @Put('entities/deletes/:id')
   async restoreDelete(
     @Param('id') id: number,
-    @Body() data: HabitacionDto,
+    @Body() data: ConsejoDirectivoDto,
     @Res() res: Response,
   ) {
     const result = await this.service.restoreDelete(id, data);
@@ -50,7 +51,7 @@ export class HabitacionesController {
 
   @Put(':id')
   async update(
-    @Body() data: Partial<HabitacionDto>,
+    @Body() data: Partial<ConsejoDirectivoDto>,
     @Param('id') id: number,
     @Res() res: Response,
   ) {

@@ -19,7 +19,7 @@ import {
 } from 'typeorm';
 import { UsuariosService } from '../../auth/usuarios/usuarios.service';
 import { AuthService } from '../../auth/auth.service';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Injectable()
 export class HabitacionesService {

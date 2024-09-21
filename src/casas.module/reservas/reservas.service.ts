@@ -30,6 +30,7 @@ export class ReservasService {
     private readonly repo: Repository<ReservaDto>,
     private readonly mailer: Mailer,
   ) {}
+  
 
   async getByRoom(id_room: number) {
     try {
@@ -37,6 +38,7 @@ export class ReservasService {
         where: { habitacion: { id: id_room }, estado: 1 }, //! Estado solo aprobados
         order: { id: 'ASC' },
       });
+      
       const en_espera = await this.repo.find({
         where: { habitacion: { id: id_room }, estado: 0 }, //! Estado solo aprobados
         order: { id: 'ASC' },
@@ -67,7 +69,7 @@ export class ReservasService {
         perPage,
         sortBy,
       } = paginator;
-      
+
       const condition: FindOptionsWhere<ReservaDto> = {};
       const conditions: FindOptionsWhere<ReservaDto>[] = [];
 

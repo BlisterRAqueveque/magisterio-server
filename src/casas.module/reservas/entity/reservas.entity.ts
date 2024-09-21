@@ -45,7 +45,7 @@ export class ReservaEntity {
   @JoinColumn({ name: 'usuario_aprobador' })
   @ManyToOne(
     () => UsuarioEntity,
-    (usuario_aprobador) => usuario_aprobador.reservas_aprovadas,
+    (usuario_aprobador) => usuario_aprobador.reservas_aprobadas,
   )
   usuario_aprobador: UsuarioEntity;
 

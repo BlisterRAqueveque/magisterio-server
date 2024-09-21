@@ -1,3 +1,4 @@
+import { Paginator } from '@/common';
 import {
   Body,
   Controller,
@@ -10,25 +11,40 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { NoticiasService } from './noticias.service';
-import { NoticiaDto } from './dto/noticias.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { Paginator } from 'src/common';
+import { NoticiaDto } from './dto/noticias.dto';
+import { NoticiasService } from './noticias.service';
 
 @Controller('noticias')
 export class NoticiasController {
   constructor(private readonly service: NoticiasService) {}
 
   @Post()
-  async insert(@Body() data: NoticiaDto, @Res() res: Response) {
-    const result = await this.service.insert(data);
-    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+  @UseInterceptors(FileInterceptor('file'))
+  async insert(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() data: any,
+    @Res() res: Response,
+  ) {
+    try {
+      const form: NoticiaDto = JSON.parse(data.form);
+      form.background = file.filename;
+      const result = await this.service.insert(form);
+      res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
+    } catch (e) {
+      console.error(e);
+      res
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ ok: false, e, msg: 'Controller error' });
+    }
   }
 
   @Get()
   async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
-    
     const result = await this.service.getAllFilter(paginator);
 
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });

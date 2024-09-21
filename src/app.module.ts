@@ -1,5 +1,5 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as express from 'express';
 import { AppController } from './app.controller';
@@ -9,18 +9,11 @@ import { CasasModule } from './casas.module/casas.module';
 import { dbConfig, mConfig } from './configurations';
 import { GeneralModule } from './general.module/general.module';
 import { AuthMiddleware } from './middlewares/auth';
-import { saveImagesToStorage } from './middlewares/image-storage';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { WebServicesModule } from './web-services/web-services.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dbConfig),
-    MulterModule.register({
-      dest: './uploads',
-      fileFilter: saveImagesToStorage('images').fileFilter,
-      storage: saveImagesToStorage('images').storage,
-    }),
     MailerModule.forRoot(mConfig),
     AuthModule,
     CasasModule,

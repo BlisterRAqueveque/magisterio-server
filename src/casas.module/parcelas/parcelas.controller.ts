@@ -15,7 +15,7 @@ import {
 import { ParcelasService } from './parcelas.service';
 import { ParcelaDto } from './dto/parcelas.dto';
 import { Response } from 'express';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Controller('parcelas')
 export class ParcelasController {

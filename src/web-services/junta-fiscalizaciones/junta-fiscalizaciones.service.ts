@@ -1,37 +1,35 @@
 import {
-  ConflictException,
   HttpException,
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { ParcelaEntity } from './entity/parcelas.entity';
-import { ParcelaDto } from './dto/parcelas.dto';
+import { JuntaFiscalizacionEntity } from './entity/junta-fiscalizaciones..entity';
+import { JuntaFiscalizacionDto } from './dto/junta-fiscalizaciones..dto';
+import { AuthService } from '@/auth/auth.service';
+import { UsuariosService } from '@/auth/usuarios/usuarios.service';
+import { Paginator } from '@/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from '../../auth/auth.service';
-import { UsuariosService } from '../../auth/usuarios/usuarios.service';
 import {
   Repository,
+  QueryFailedError,
   FindOptionsWhere,
   Like,
   Not,
   IsNull,
-  QueryFailedError,
 } from 'typeorm';
-import { Paginator } from '@/common';
 
 @Injectable()
-export class ParcelasService {
-  private readonly logger = new Logger('PARCELAS');
+export class JuntaFiscalizacionesService {
+  private readonly logger = new Logger('JUNTA FISCALIZACIONES');
   constructor(
-    @InjectRepository(ParcelaEntity)
-    private readonly repo: Repository<ParcelaDto>,
+    @InjectRepository(JuntaFiscalizacionEntity)
+    private readonly repo: Repository<JuntaFiscalizacionDto>,
     private readonly usuarioService: UsuariosService,
     private readonly auth: AuthService,
   ) {}
 
-  async insert(data: ParcelaDto) {
+  async insert(data: JuntaFiscalizacionDto) {
     try {
       const result = await this.repo.save(data);
       return result;
@@ -43,18 +41,13 @@ export class ParcelasService {
     }
   }
 
-  async update(data: Partial<ParcelaDto>, id: number) {
+  async update(data: Partial<JuntaFiscalizacionDto>, id: number) {
     try {
       const entity = await this.repo.findOne({
         where: { id },
-        relations: { ediciones: true, ingresos: true },
+        relations: { ediciones: true },
       });
       if (!entity) throw new NotFoundException('Entity not found');
-      if (data.activo === false) {
-        entity.ingresos.forEach((i) => {
-          if (i.salida_fecha === null) i.salida_fecha = new Date();
-        });
-      }
       const merge = await this.repo.merge(entity, data);
       const result = await this.repo.save(merge);
       return result;
@@ -70,7 +63,7 @@ export class ParcelasService {
     try {
       const { id, nombre, page, perPage, sortBy } = paginator;
 
-      const conditions: FindOptionsWhere<ParcelaDto> = {};
+      const conditions: FindOptionsWhere<JuntaFiscalizacionDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);
 
@@ -80,14 +73,8 @@ export class ParcelasService {
         take: perPage,
         order: {
           id: sortBy === 'ASC' ? 'ASC' : sortBy === 'DESC' ? 'DESC' : 'DESC',
-          //ediciones: { fecha_editado: 'ASC' },
         },
-        relations: {
-          creado_por: true,
-          ediciones: true,
-          casa_mutual: true,
-          ingresos: true,
-        },
+        relations: { creado_por: true, ediciones: true },
         select: {
           creado_por: { nombre_completo: true },
         },
@@ -109,16 +96,11 @@ export class ParcelasService {
       const usuario = await this.usuarioService.getUserInfo(
         decodedToken.username,
       );
-      //* Si no existe, no está autorizado
-      if (!usuario) throw new UnauthorizedException('User not found');
+
       //* Buscamos la entidad para hacer merge
       const entity = await this.repo.findOne({
         where: { id },
-        relations: { ediciones: true, ingresos: true },
-      });
-
-      entity.ingresos.forEach((i) => {
-        if (i.salida_fecha === null) i.salida_fecha = new Date();
+        relations: { ediciones: true },
       });
 
       entity.ediciones.push({
@@ -144,7 +126,7 @@ export class ParcelasService {
       const entities = await this.repo.find({
         withDeleted: true,
         where: { borrado_el: Not(IsNull()) },
-        relations: { creado_por: true, ediciones: true, casa_mutual: true },
+        relations: { creado_por: true, ediciones: true },
       });
       return entities;
     } catch (err: any) {
@@ -155,12 +137,12 @@ export class ParcelasService {
     }
   }
 
-  async restoreDelete(id: number, data: ParcelaDto) {
+  async restoreDelete(id: number, data: JuntaFiscalizacionDto) {
     try {
       await this.repo.restore(id);
       const entity = await this.repo.findOne({
         where: { id },
-        relations: { creado_por: true, ediciones: true, casa_mutual: true },
+        relations: { creado_por: true, ediciones: true },
       });
       const merge = await this.repo.merge(entity, data);
       const result = await this.repo.save(merge);

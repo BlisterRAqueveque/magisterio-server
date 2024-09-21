@@ -1,24 +1,18 @@
 import { UsuarioDto } from '@/auth/usuarios/dto/usuarios.dto';
 import { EdicionDto } from '@/general.module/ediciones/dto/ediciones.dto';
 
-export class NoticiaDto {
+export class ConsejoDirectivoDto {
   id: number;
-
-  background: string;
-
-  title: string;
-
-  subtitle: string;
-
-  news: string;
+  cargo: string;
+  nombre: string;
+  n_socio: string;
+  dni: string;
 
   activo: boolean;
 
-  fecha_creado: Date;
+  fecha_carga: Date;
 
   borrado_el: Date;
-
   creado_por: UsuarioDto;
-
   ediciones: EdicionDto[];
 }

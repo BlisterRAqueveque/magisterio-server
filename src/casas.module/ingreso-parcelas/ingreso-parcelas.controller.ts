@@ -13,7 +13,7 @@ import {
 import { Response } from 'express';
 import { IngresoParcelaDto } from './dto/ingreso-parcela.dto';
 import { IngresoParcelasService } from './ingreso-parcelas.service';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Controller('ingreso-parcelas')
 export class IngresoParcelasController {

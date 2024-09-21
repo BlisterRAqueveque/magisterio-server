@@ -16,7 +16,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { NoticiaEntity } from 'src/web-services/noticias/entity/noticias.entity';
+import { NoticiaEntity } from '@/web-services/noticias/entity/noticias.entity';
+import { ConsejoDirectivoEntity } from '@/web-services/consejo-directivo/entity/consejo-directivo.entity';
+import { JuntaFiscalizacionEntity } from '@/web-services/junta-fiscalizaciones/entity/junta-fiscalizaciones..entity';
+import { ResolucionEntity } from '@/web-services/resoluciones/entity/resoluciones.entity';
 
 @Entity('usuarios')
 export class UsuarioEntity {
@@ -75,7 +78,7 @@ export class UsuarioEntity {
     () => ReservaEntity,
     (reservas_aprovadas) => reservas_aprovadas.usuario_aprobador,
   )
-  reservas_aprovadas: ReservaEntity[];
+  reservas_aprobadas: ReservaEntity[];
 
   @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_usuarios, {
     cascade: true,
@@ -112,4 +115,19 @@ export class UsuarioEntity {
 
   @OneToMany(() => NoticiaEntity, (noticias) => noticias.creado_por)
   noticias: NoticiaEntity[];
+
+  @OneToMany(
+    () => ConsejoDirectivoEntity,
+    (consejos_directivos) => consejos_directivos.creado_por,
+  )
+  consejos_directivos: ConsejoDirectivoEntity[];
+
+  @OneToMany(
+    () => JuntaFiscalizacionEntity,
+    (junta_fiscalizaciones) => junta_fiscalizaciones.creado_por,
+  )
+  junta_fiscalizaciones: JuntaFiscalizacionEntity[];
+
+  @OneToMany(() => ResolucionEntity, (resoluciones) => resoluciones.creado_por)
+  resoluciones: ResolucionEntity[];
 }

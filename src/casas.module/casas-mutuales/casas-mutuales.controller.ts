@@ -14,7 +14,7 @@ import {
 import { CasasMutualesService } from './casas-mutuales.service';
 import { CasaMutualDto } from './dto/casas-mutuales.dto';
 import { Response } from 'express';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Controller('casas-mutuales')
 export class CasasMutualesController {
@@ -29,7 +29,7 @@ export class CasasMutualesController {
   @Get()
   async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
     const result = await this.service.getAllFilter(paginator);
-    
+
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 

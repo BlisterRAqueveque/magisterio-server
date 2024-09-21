@@ -4,7 +4,10 @@ import { HabitacionDto } from '../../../casas.module/habitaciones/dto/habitacion
 import { ParcelaDto } from '../../../casas.module/parcelas/dto/parcelas.dto';
 import { ReservaDto } from '../../../casas.module/reservas/dto/reservas.dto';
 import { EdicionDto } from '../../../general.module/ediciones/dto/ediciones.dto';
-import { NoticiaDto } from 'src/web-services/noticias/dto/noticias.dto';
+import { NoticiaDto } from '@/web-services/noticias/dto/noticias.dto';
+import { ConsejoDirectivoDto } from '@/web-services/consejo-directivo/dto/consejo-directivo.dto';
+import { JuntaFiscalizacionDto } from '@/web-services/junta-fiscalizaciones/dto/junta-fiscalizaciones..dto';
+import { ResolucionDto } from '@/web-services/resoluciones/dto/resoluciones.dto';
 
 export class UsuarioDto {
   id: number;
@@ -27,7 +30,7 @@ export class UsuarioDto {
 
   casa_mutual: CasaMutualDto[];
 
-  reservas_aprovadas: ReservaDto[];
+  reservas_aprobadas: ReservaDto[];
 
   ediciones: EdicionDto[];
 
@@ -44,4 +47,10 @@ export class UsuarioDto {
   ingreso_parcelas: IngresoParcelaDto[];
 
   noticias: NoticiaDto[];
+
+  consejos_directivos: ConsejoDirectivoDto[];
+
+  junta_fiscalizaciones: JuntaFiscalizacionDto[];
+
+  resoluciones: ResolucionDto[];
 }

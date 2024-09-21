@@ -1,5 +1,5 @@
-import { UsuarioEntity } from 'src/auth/usuarios/entity/usuarios.entity';
-import { EdicionEntity } from 'src/general.module/ediciones/entity/ediciones.entity';
+import { UsuarioEntity } from '@/auth/usuarios/entity/usuarios.entity';
+import { EdicionEntity } from '@/general.module/ediciones/entity/ediciones.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('noticias')
 export class NoticiaEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -28,7 +28,7 @@ export class NoticiaEntity {
   news: string;
 
   @Column({ type: 'bool', default: true })
-  active: boolean;
+  activo: boolean;
 
   @CreateDateColumn()
   fecha_creado: Date;
@@ -39,6 +39,8 @@ export class NoticiaEntity {
   @ManyToOne(() => UsuarioEntity, (creado_por) => creado_por.noticias)
   creado_por: UsuarioEntity;
 
-  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_noticias)
+  @OneToMany(() => EdicionEntity, (ediciones) => ediciones.ediciones_noticias, {
+    cascade: true,
+  })
   ediciones: EdicionEntity[];
 }

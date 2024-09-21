@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
-import { UsuariosService } from 'src/auth/usuarios/usuarios.service';
+import { AuthService } from '@/auth/auth.service';
+import { UsuariosService } from '@/auth/usuarios/usuarios.service';
 import {
   FindOptionsWhere,
   IsNull,
@@ -17,7 +17,7 @@ import {
 } from 'typeorm';
 import { NoticiaDto } from './dto/noticias.dto';
 import { NoticiaEntity } from './entity/noticias.entity';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Injectable()
 export class NoticiasService {
@@ -45,6 +45,7 @@ export class NoticiasService {
     try {
       const entity = await this.repo.findOne({
         where: { id },
+        relations: { ediciones: true },
       });
       if (!entity) throw new NotFoundException('Entity not found');
       const merge = await this.repo.merge(entity, data);
@@ -61,7 +62,7 @@ export class NoticiasService {
   async getAllFilter(paginator: Paginator) {
     try {
       const { id, nombre, page, perPage, sortBy } = paginator;
-      
+
       const conditions: FindOptionsWhere<NoticiaDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.title = Like(`%${nombre}%`);

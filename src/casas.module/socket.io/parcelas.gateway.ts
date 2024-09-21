@@ -6,8 +6,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { AuthService } from 'src/auth/auth.service';
-import { UsuariosService } from 'src/auth/usuarios/usuarios.service';
+import { AuthService } from '@/auth/auth.service';
+import { UsuariosService } from '@/auth/usuarios/usuarios.service';
 import { ParcelasEventEmitter } from './event-emitter.service';
 
 /**

@@ -15,7 +15,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { IngresoParcelaEntity } from './entities/ingreso-parcela.entity';
 import { ParcelasEventEmitter } from '../socket.io/event-emitter.service';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Injectable()
 export class IngresoParcelasService {

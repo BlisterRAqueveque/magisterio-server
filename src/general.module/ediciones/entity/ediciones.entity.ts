@@ -1,9 +1,7 @@
-import { NoticiaEntity } from 'src/web-services/noticias/entity/noticias.entity';
-import { UsuarioEntity } from '../../../auth/usuarios/entity/usuarios.entity';
-import { CasaMutualEntity } from '../../../casas.module/casas-mutuales/entity/casas-mutuales.entity';
-import { HabitacionEntity } from '../../../casas.module/habitaciones/entity/habitaciones.entity';
-import { ParcelaEntity } from '../../../casas.module/parcelas/entity/parcelas.entity';
-import { DelegacionEntity } from '../../../general.module/delegaciones/entity/delegaciones.entity';
+import { ConsejoDirectivoEntity } from '@/web-services/consejo-directivo/entity/consejo-directivo.entity';
+import { JuntaFiscalizacionEntity } from '@/web-services/junta-fiscalizaciones/entity/junta-fiscalizaciones..entity';
+import { NoticiaEntity } from '@/web-services/noticias/entity/noticias.entity';
+import { ResolucionEntity } from '@/web-services/resoluciones/entity/resoluciones.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +10,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UsuarioEntity } from '../../../auth/usuarios/entity/usuarios.entity';
+import { CasaMutualEntity } from '../../../casas.module/casas-mutuales/entity/casas-mutuales.entity';
+import { HabitacionEntity } from '../../../casas.module/habitaciones/entity/habitaciones.entity';
+import { ParcelaEntity } from '../../../casas.module/parcelas/entity/parcelas.entity';
+import { DelegacionEntity } from '../../../general.module/delegaciones/entity/delegaciones.entity';
 
 @Entity('ediciones')
 export class EdicionEntity {
@@ -63,4 +66,22 @@ export class EdicionEntity {
     (ediciones_noticias) => ediciones_noticias.ediciones,
   )
   ediciones_noticias: NoticiaEntity;
+
+  @ManyToOne(
+    () => ConsejoDirectivoEntity,
+    (ediciones_consejo_directivo) => ediciones_consejo_directivo.ediciones,
+  )
+  ediciones_consejo_directivo: ConsejoDirectivoEntity;
+
+  @ManyToOne(
+    () => JuntaFiscalizacionEntity,
+    (ediciones_junta_fiscalizacion) => ediciones_junta_fiscalizacion.ediciones,
+  )
+  ediciones_junta_fiscalizacion: JuntaFiscalizacionEntity;
+
+  @ManyToOne(
+    () => ResolucionEntity,
+    (ediciones_resoluciones) => ediciones_resoluciones.ediciones,
+  )
+  ediciones_resolucion: ResolucionEntity;
 }

@@ -19,7 +19,7 @@ import {
 } from 'typeorm';
 import { CasaMutualDto } from './dto/casas-mutuales.dto';
 import { CasaMutualEntity } from './entity/casas-mutuales.entity';
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 @Injectable()
 export class CasasMutualesService {

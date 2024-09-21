@@ -1,4 +1,4 @@
-import { Paginator } from 'src/common';
+import { Paginator } from '@/common';
 
 export class ReservaPaginator extends Paginator {
   desde: string;

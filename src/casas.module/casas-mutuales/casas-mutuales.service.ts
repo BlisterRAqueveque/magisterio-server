@@ -7,8 +7,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from '../../auth/auth.service';
-import { UsuariosService } from '../../auth/usuarios/usuarios.service';
 import {
   FindOptionsWhere,
   IsNull,
@@ -20,6 +18,8 @@ import {
 import { CasaMutualDto } from './dto/casas-mutuales.dto';
 import { CasaMutualEntity } from './entity/casas-mutuales.entity';
 import { Paginator } from '@/common';
+import { AuthService } from '@/auth/auth.service';
+import { UsuariosService } from '@/auth/usuarios/usuarios.service';
 
 @Injectable()
 export class CasasMutualesService {
@@ -85,6 +85,7 @@ export class CasasMutualesService {
           creado_por: true,
           ediciones: true,
           horarios: true,
+          casa_horarios: true,
         },
         select: {
           creado_por: { nombre_completo: true },

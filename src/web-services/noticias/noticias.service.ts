@@ -88,6 +88,23 @@ export class NoticiasService {
     }
   }
 
+  async getOne(id: number) {
+    try {
+      const entity = await this.repo.findOne({ where: { id } });
+
+      if (!entity) throw new NotFoundException('Entity not found');
+
+      return entity;
+    } catch (err: any) {
+      this.logger.error(err.message);
+
+      if (err instanceof QueryFailedError)
+        throw new HttpException(err.message, err.driverError);
+
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
   async softDelete(id: number, token: string) {
     try {
       //* Decodificamos el token para:

@@ -20,6 +20,7 @@ import { NoticiaEntity } from '@/web-services/noticias/entity/noticias.entity';
 import { ConsejoDirectivoEntity } from '@/web-services/consejo-directivo/entity/consejo-directivo.entity';
 import { JuntaFiscalizacionEntity } from '@/web-services/junta-fiscalizaciones/entity/junta-fiscalizaciones..entity';
 import { ResolucionEntity } from '@/web-services/resoluciones/entity/resoluciones.entity';
+import { DelegacionEntity } from '@/general.module/delegaciones/entity/delegaciones.entity';
 
 @Entity('usuarios')
 export class UsuarioEntity {
@@ -73,6 +74,26 @@ export class UsuarioEntity {
   })
   @ManyToMany(() => CasaMutualEntity, (casa_mutual) => casa_mutual.usuarios)
   casa_mutual: CasaMutualEntity[];
+
+  @JoinTable({
+    name: 'usuario_delegacion',
+    joinColumn: {
+      name: 'usuario',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'delegacion',
+      referencedColumnName: 'id',
+    },
+  })
+  @ManyToMany(() => DelegacionEntity, (delegacion) => delegacion.usuarios)
+  delegacion: DelegacionEntity[];
+
+  @OneToMany(
+    () => DelegacionEntity,
+    (carga_delegacion) => carga_delegacion.creado_por,
+  )
+  carga_delegacion: DelegacionEntity[];
 
   @OneToMany(
     () => ReservaEntity,

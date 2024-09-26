@@ -22,6 +22,9 @@ import { ReservasController } from './reservas/reservas.controller';
 import { ReservasService } from './reservas/reservas.service';
 import { ParcelasGateway } from './socket.io/parcelas.gateway';
 import { ParcelasEventEmitter } from './socket.io/event-emitter.service';
+import { CasaHorariosController } from './casa-horarios/casa-horarios.controller';
+import { CasaHorariosService } from './casa-horarios/casa-horarios.service';
+import { CasaHorarioEntity } from './casa-horarios/entity/casas-horarios.entity';
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { ParcelasEventEmitter } from './socket.io/event-emitter.service';
       ReservaEntity,
       HorarioEntity,
       IngresoParcelaEntity,
+      CasaHorarioEntity,
     ]),
     AuthModule,
   ],
@@ -45,6 +49,7 @@ import { ParcelasEventEmitter } from './socket.io/event-emitter.service';
     Mailer,
     ParcelasGateway,
     ParcelasEventEmitter,
+    CasaHorariosService,
   ],
   controllers: [
     CasasMutualesController,
@@ -53,6 +58,7 @@ import { ParcelasEventEmitter } from './socket.io/event-emitter.service';
     ReservasController,
     HorariosController,
     IngresoParcelasController,
+    CasaHorariosController,
   ],
 })
 export class CasasModule {}

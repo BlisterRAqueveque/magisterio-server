@@ -1,8 +1,9 @@
-import { UsuarioDto } from '../../../auth/usuarios/dto/usuarios.dto';
-import { HabitacionDto } from '../../../casas.module/habitaciones/dto/habitaciones.dto';
-import { HorarioDto } from '../../../casas.module/horarios/dto/horarios.dto';
-import { ParcelaDto } from '../../../casas.module/parcelas/dto/parcelas.dto';
-import { EdicionDto } from '../../../general.module/ediciones/dto/ediciones.dto';
+import { UsuarioDto } from '@/auth/usuarios/dto/usuarios.dto';
+import { CasaHorarioDto } from '@/casas.module/casa-horarios/dto/casas-horarios.dto';
+import { HabitacionDto } from '@/casas.module/habitaciones/dto/habitaciones.dto';
+import { HorarioDto } from '@/casas.module/horarios/dto/horarios.dto';
+import { ParcelaDto } from '@/casas.module/parcelas/dto/parcelas.dto';
+import { EdicionDto } from '@/general.module/ediciones/dto/ediciones.dto';
 
 export class CasaMutualDto {
   id: number;
@@ -29,4 +30,6 @@ export class CasaMutualDto {
   horarios: HorarioDto;
 
   ediciones: EdicionDto[];
+
+  casa_horarios: CasaHorarioDto[];
 }

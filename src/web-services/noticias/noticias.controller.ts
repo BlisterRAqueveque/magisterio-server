@@ -7,6 +7,7 @@ import {
   Headers,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -46,6 +47,13 @@ export class NoticiasController {
   @Get()
   async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
     const result = await this.service.getAllFilter(paginator);
+
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
+  }
+
+  @Get(':id')
+  async getOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    const result = await this.service.getOne(id);
 
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }

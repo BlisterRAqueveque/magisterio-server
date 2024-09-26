@@ -65,6 +65,34 @@ export class AppModule {
           path: 'ingreso-parcelas/:id',
           method: RequestMethod.PUT,
         },
+        {
+          path: 'noticias/:id',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'noticias',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'junta-fiscalizaciones',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'consejo-directivo',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'resoluciones',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'casas-mutuales',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'delegaciones',
+          method: RequestMethod.GET,
+        },
       )
       .forRoutes('');
   }

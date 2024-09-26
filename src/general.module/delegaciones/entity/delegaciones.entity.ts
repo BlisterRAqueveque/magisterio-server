@@ -1,12 +1,17 @@
+import { CasaHorarioEntity } from '@/casas.module/casa-horarios/entity/casas-horarios.entity';
 import { ReservaEntity } from '../../../casas.module/reservas/entity/reservas.entity';
 import { EdicionEntity } from '../../../general.module/ediciones/entity/ediciones.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UsuarioEntity } from '@/auth/usuarios/entity/usuarios.entity';
 
 @Entity('delegaciones')
 export class DelegacionEntity {
@@ -23,11 +28,20 @@ export class DelegacionEntity {
   @Column({ type: 'int', default: 0 })
   cp: number;
   @Column({ type: 'varchar', nullable: true })
-  domicilio: string;
+  direccion: string;
+  @Column({ type: 'varchar', nullable: true })
+  correo: string;
+  @Column({ type: 'bool', default: true })
+  activo: boolean;
   @Column({ type: 'varchar', nullable: true })
   email: string;
-  @Column({ type: 'simple-array', nullable: true })
-  horarios: string[];
+
+  @OneToMany(
+    () => CasaHorarioEntity,
+    (del_horarios) => del_horarios.delegacion,
+    { cascade: true },
+  )
+  casa_horarios: CasaHorarioEntity[];
 
   @CreateDateColumn()
   fecha_creado: Date;
@@ -41,4 +55,13 @@ export class DelegacionEntity {
 
   @OneToMany(() => ReservaEntity, (reservas) => reservas.delegacion)
   reservas: ReservaEntity[];
+
+  @ManyToMany(() => UsuarioEntity, (usuarios) => usuarios.delegacion)
+  usuarios: UsuarioEntity[];
+
+  @DeleteDateColumn()
+  borrado_el: Date;
+
+  @ManyToOne(() => UsuarioEntity, (creado_por) => creado_por.carga_delegacion)
+  creado_por: UsuarioEntity;
 }

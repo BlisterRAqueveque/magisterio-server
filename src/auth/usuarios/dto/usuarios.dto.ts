@@ -8,6 +8,7 @@ import { NoticiaDto } from '@/web-services/noticias/dto/noticias.dto';
 import { ConsejoDirectivoDto } from '@/web-services/consejo-directivo/dto/consejo-directivo.dto';
 import { JuntaFiscalizacionDto } from '@/web-services/junta-fiscalizaciones/dto/junta-fiscalizaciones..dto';
 import { ResolucionDto } from '@/web-services/resoluciones/dto/resoluciones.dto';
+import { DelegacionDto } from '@/general.module/delegaciones/dto/delegaciones.dto';
 
 export class UsuarioDto {
   id: number;
@@ -53,4 +54,8 @@ export class UsuarioDto {
   junta_fiscalizaciones: JuntaFiscalizacionDto[];
 
   resoluciones: ResolucionDto[];
+
+  delegacion: DelegacionDto[];
+
+  carga_delegacion: DelegacionDto[];
 }

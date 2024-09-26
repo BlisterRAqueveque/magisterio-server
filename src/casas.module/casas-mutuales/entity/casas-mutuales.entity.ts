@@ -1,8 +1,9 @@
-import { UsuarioEntity } from '../../../auth/usuarios/entity/usuarios.entity';
-import { HabitacionEntity } from '../../../casas.module/habitaciones/entity/habitaciones.entity';
-import { HorarioEntity } from '../../../casas.module/horarios/entity/horarios.entity';
-import { ParcelaEntity } from '../../../casas.module/parcelas/entity/parcelas.entity';
-import { EdicionEntity } from '../../../general.module/ediciones/entity/ediciones.entity';
+import { UsuarioEntity } from '@/auth/usuarios/entity/usuarios.entity';
+import { CasaHorarioEntity } from '@/casas.module/casa-horarios/entity/casas-horarios.entity';
+import { HabitacionEntity } from '@/casas.module/habitaciones/entity/habitaciones.entity';
+import { HorarioEntity } from '@/casas.module/horarios/entity/horarios.entity';
+import { ParcelaEntity } from '@/casas.module/parcelas/entity/parcelas.entity';
+import { EdicionEntity } from '@/general.module/ediciones/entity/ediciones.entity';
 import {
   Column,
   CreateDateColumn,
@@ -66,4 +67,10 @@ export class CasaMutualEntity {
     { cascade: true },
   )
   ediciones: EdicionEntity[];
+
+  @OneToMany(
+    () => CasaHorarioEntity,
+    (casa_horarios) => casa_horarios.casa_mutual,
+  )
+  casa_horarios: CasaHorarioEntity[];
 }

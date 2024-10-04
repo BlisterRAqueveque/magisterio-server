@@ -93,6 +93,14 @@ export class AppModule {
           path: 'delegaciones',
           method: RequestMethod.GET,
         },
+        {
+          path: 'parcelas/:id',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'horarios',
+          method: RequestMethod.GET,
+        },
       )
       .forRoutes('');
   }

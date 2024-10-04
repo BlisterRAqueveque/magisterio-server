@@ -33,6 +33,12 @@ export class ParcelasController {
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }
 
+  @Get(':id')
+  async getOne(@Param('id') id: number, @Res() res: Response) {
+    const result = await this.service.getOne(id);
+    res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
+  }
+
   @Get('entities/deletes')
   async getDeletes(@Res() res: Response) {
     const result = await this.service.getDeletes();

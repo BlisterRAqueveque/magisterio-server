@@ -101,6 +101,22 @@ export class ParcelasService {
     }
   }
 
+  async getOne(id: number) {
+    try {
+      const result = await this.repo.findOne({  
+        where: { id },
+        relations: { casa_mutual: true },
+      });
+      if (!result) throw new NotFoundException('Entity not found');
+      return result;
+    } catch (err) {
+      this.logger.error(err);
+      if (err instanceof QueryFailedError)
+        throw new HttpException(err.message, err.driverError);
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
   async softDelete(id: number, token: string) {
     try {
       //* Decodificamos el token para:

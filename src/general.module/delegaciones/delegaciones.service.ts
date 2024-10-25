@@ -31,12 +31,12 @@ export class DelegacionesService {
     private readonly auth: AuthService,
   ) {}
 
-  async insert(data: DelegacionDto) {
+  async insert(data: DelegacionDto[]) {
     try {
-      const entity = await this.repo.findOne({
-        where: { nombre: data.nombre },
-      });
-      if (entity) throw new ConflictException('Already exist');
+      // const entity = await this.repo.findOne({
+      //   where: { nombre: data.nombre },
+      // });
+      // if (entity) throw new ConflictException('Already exist');
       const result = await this.repo.save(data);
       return result;
     } catch (err: any) {
@@ -137,7 +137,7 @@ export class DelegacionesService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
       //* Si no existe, no está autorizado
       if (!usuario) throw new UnauthorizedException('User not found');

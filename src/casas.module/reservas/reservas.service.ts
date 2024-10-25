@@ -1,6 +1,7 @@
 import {
   ConflictException,
   HttpException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
@@ -10,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
   FindOptionsWhere,
+  In,
   LessThanOrEqual,
   Like,
   MoreThanOrEqual,
@@ -21,6 +23,7 @@ import { ReservaDto } from './dto/reservas.dto';
 import { ReservaEntity } from './entity/reservas.entity';
 import { formatDate } from '../../tools';
 import { ReservaPaginator } from './dto/reservas.paginator.dto';
+import { Info } from './dto/reservas.info';
 
 @Injectable()
 export class ReservasService {
@@ -30,7 +33,6 @@ export class ReservasService {
     private readonly repo: Repository<ReservaDto>,
     private readonly mailer: Mailer,
   ) {}
-  
 
   async getByRoom(id_room: number) {
     try {
@@ -38,7 +40,7 @@ export class ReservasService {
         where: { habitacion: { id: id_room }, estado: 1 }, //! Estado solo aprobados
         order: { id: 'ASC' },
       });
-      
+
       const en_espera = await this.repo.find({
         where: { habitacion: { id: id_room }, estado: 0 }, //! Estado solo aprobados
         order: { id: 'ASC' },
@@ -68,6 +70,7 @@ export class ReservasService {
         page,
         perPage,
         sortBy,
+        casas,
       } = paginator;
 
       const condition: FindOptionsWhere<ReservaDto> = {};
@@ -115,6 +118,8 @@ export class ReservasService {
           { apellido: Like(`%${nombre}%`) },
         );
       }
+      //! Este filtro es para solo se vean las casas asignadas de los usuarios
+      if (casas) condition.habitacion = { casa_mutual: { id: In(casas) } };
 
       const [result, count] = await this.repo.findAndCount({
         where: conditions.length === 0 ? condition : conditions,
@@ -135,6 +140,24 @@ export class ReservasService {
       });
 
       return { result, count };
+    } catch (err: any) {
+      this.logger.error(err);
+      if (err instanceof QueryFailedError)
+        throw new HttpException(err.message, err.driverError);
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
+  async getOne(id: number) {
+    try {
+      const result = await this.repo.findOne({
+        where: { id },
+        relations: { delegacion: true, habitacion: { casa_mutual: true } },
+      });
+
+      if (!result) throw new NotFoundException('Entity not found');
+
+      return result;
     } catch (err: any) {
       this.logger.error(err);
       if (err instanceof QueryFailedError)
@@ -170,6 +193,9 @@ export class ReservasService {
         });
         if (entity) throw new ConflictException('Has reserva');
         const result = await this.repo.save(data);
+
+        this.prepareEmailUpload(result.id);
+
         return result;
       } else {
         throw new UnauthorizedException('nothing to save');
@@ -181,19 +207,66 @@ export class ReservasService {
       throw new HttpException(err.message, err.status);
     }
   }
+  async prepareEmailUpload(id: number) {
+    try {
+      const entity = await this.getOne(id);
+
+      const {
+        correo,
+        nombre,
+        apellido,
+        n_socio,
+        habitacion,
+        fecha_aprobado,
+        desde,
+        hasta,
+      } = entity;
+
+      //* Obtenemos el template
+      const template = 'pendiente';
+
+      /** Creamos la info */
+      const info: Info = {
+        template,
+        correo,
+        nombre: `${nombre} ${apellido}`,
+        n_socio,
+        delegacion: habitacion
+          ? habitacion.casa_mutual
+            ? habitacion.casa_mutual.nombre
+            : 'No tiene'
+          : 'No tiene',
+        habitacion: habitacion ? habitacion.nombre : 'No tiene',
+        fecha_aprobado: formatDate(fecha_aprobado as any),
+        desde: formatDate(desde as any),
+        hasta: formatDate(hasta as any),
+        servicios: habitacion ? habitacion.servicios : [],
+        fecha: formatDate(new Date().toDateString()),
+      };
+
+      this.sendEmail(info);
+    } catch (err: any) {
+      this.logger.error(err);
+      if (err instanceof QueryFailedError)
+        throw new HttpException(err.message, err.driverError);
+      throw new HttpException(err.message, err.status);
+    }
+  }
 
   async update(data: Partial<ReservaDto>, id: number) {
     try {
-      const entity = await this.repo.findOne({
-        where: { id },
-        relations: { habitacion: { casa_mutual: true }, delegacion: true },
-      });
-      if (!entity) throw new NotFoundException('Entity not found');
+      const entity = await this.getOne(id);
+
       const approved = entity.estado === 0 && data.estado === 1;
+
       const disapproved = entity.estado === 0 && data.estado === -1;
+
       const merge = await this.repo.merge(entity, data);
+
       const result = await this.repo.save(merge);
-      if (approved || disapproved) this.sendMail(approved, disapproved, entity);
+
+      if (approved || disapproved)
+        this.prepareEmailUpdate(approved, disapproved, entity);
       return result;
     } catch (err: any) {
       this.logger.error(err);
@@ -202,41 +275,66 @@ export class ReservasService {
       throw new HttpException(err.message, err.status);
     }
   }
-  sendMail(approved: boolean, disapproved: boolean, data: ReservaDto) {
-    const estado = approved
+  prepareEmailUpdate(
+    approved: boolean,
+    disapproved: boolean,
+    data: ReservaDto,
+  ) {
+    const {
+      correo,
+      nombre,
+      apellido,
+      n_socio,
+      habitacion,
+      fecha_aprobado,
+      desde,
+      hasta,
+    } = data;
+
+    //* Obtenemos el template
+    const template = approved
       ? 'aprobada'
       : disapproved
         ? 'desaprobada'
         : 'indefinido';
+
+    /** Creamos la info */
     const info: Info = {
-      estado,
-      correo: data.correo,
-      nombre: `${data.nombre} ${data.apellido}`,
-      n_socio: data.n_socio,
-      delegacion: data.delegacion ? data.delegacion.nombre : 'No tiene',
-      habitacion: data.habitacion ? data.habitacion.nombre : 'No tiene',
-      casa_mutual: data.habitacion
-        ? data.habitacion.casa_mutual
-          ? data.habitacion.casa_mutual.nombre
+      template,
+      correo,
+      nombre: `${nombre} ${apellido}`,
+      n_socio,
+      delegacion: habitacion
+        ? habitacion.casa_mutual
+          ? habitacion.casa_mutual.nombre
           : 'No tiene'
         : 'No tiene',
-      reserva: `desde: ${formatDate(data.desde as any)}, hasta: ${formatDate(data.hasta as any)}`,
+      habitacion: habitacion ? habitacion.nombre : 'No tiene',
+      fecha_aprobado: formatDate(fecha_aprobado as any),
+      desde: formatDate(desde as any),
+      hasta: formatDate(hasta as any),
+      servicios: habitacion ? habitacion.servicios : [],
+      fecha: formatDate(new Date().toDateString()),
     };
-    //TRABAJAMOS CON EVENT EMITTERS =>
+
     this.sendEmail(info);
   }
 
   async sendEmail(info: Info) {
     try {
-      this.mailer.genericMail(
-        info.correo,
-        body(info),
-        `Reserva ${info.estado}`,
-        `Su reserva en ${info.casa_mutual} fue ${info.estado}`,
+      const { correo, template, ...context } = info;
+      this.mailer.sendMail(
+        correo,
+        'Notificación ReservaDto, Mutual Magisterio',
+        template,
+        context,
       );
     } catch (err: any) {
       this.logger.error(err);
-      throw new HttpException('Internal server error', 500);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -257,33 +355,3 @@ export class ReservasService {
     );
   }
 }
-
-export interface Info {
-  estado: string;
-  correo: string;
-  nombre: string;
-  n_socio: string;
-  delegacion: string;
-  habitacion: string;
-  casa_mutual: string;
-  reserva: string;
-}
-
-const body = (info: Info) => {
-  const mail = `
-    <p>Estimado <b>${info.nombre}</b>, n° socio: ${info.n_socio}, le comentamos que su reserva: </p>
-    <ul>
-      <li><p><b>Casa mutual: </b>${info.casa_mutual}</p></li>
-      <li><p><b>Habitación: </b>${info.habitacion}</p></li>
-      <li><p><b>Días: </b>${info.reserva}</p></li>
-      <li><p><b>Delegación: </b>${info.delegacion}</p></li>
-      <!--<li><p><b></b></p></li>-->
-    </ul>
-    <p>Fue ${info.estado}</p>
-  `;
-
-  if (info.estado === 'aprobado') {
-    //* poner instructivo de como proceder
-  }
-  return mail;
-};

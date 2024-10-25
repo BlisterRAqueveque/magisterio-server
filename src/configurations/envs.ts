@@ -13,6 +13,7 @@ interface EnvVars {
   NODEMAILER_PASS: string;
   NODEMAILER_HOST: string;
   NODEMAILER_PORT: number;
+  NODEMAILER_FROM: string;
 }
 
 const envsSchema = joi
@@ -27,6 +28,7 @@ const envsSchema = joi
     NODEMAILER_PASS: joi.string().required(),
     NODEMAILER_HOST: joi.string().required(),
     NODEMAILER_PORT: joi.number().required(),
+    NODEMAILER_FROM: joi.string().required(),
   })
   .unknown(true);
 
@@ -48,4 +50,5 @@ export const envs = {
   mail_pass: envVars.NODEMAILER_PASS,
   mail_host: envVars.NODEMAILER_HOST,
   mail_port: envVars.NODEMAILER_PORT,
+  mail_from: envVars.NODEMAILER_FROM,
 };

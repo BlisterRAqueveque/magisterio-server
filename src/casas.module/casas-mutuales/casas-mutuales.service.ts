@@ -9,6 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   FindOptionsWhere,
+  In,
   IsNull,
   Like,
   Not,
@@ -67,10 +68,12 @@ export class CasasMutualesService {
 
   async getAllFilter(paginator: Paginator) {
     try {
-      const { id, nombre, page, perPage, sortBy } = paginator;
+      const { id, nombre, page, perPage, sortBy, casas } = paginator;
       const conditions: FindOptionsWhere<CasaMutualDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);
+      //! Este filtro es para solo se vean las casas asignadas de los usuarios
+      if (casas) conditions.id = In(casas);
 
       const [result, count] = await this.repo.findAndCount({
         where: conditions,
@@ -138,7 +141,7 @@ export class CasasMutualesService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
       //* Si no existe, no está autorizado
       if (!usuario) throw new UnauthorizedException('User not found');

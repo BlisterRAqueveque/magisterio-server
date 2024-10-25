@@ -87,7 +87,7 @@ export class UsuariosController {
   ) {
     try {
       const result = await this.auth.verifyJwt(token.split(' ')[1]);
-      const user = await this.service.getUserInfo(result.username);
+      const user = await this.service.getUserInfo(result.usuario);
       res.status(HttpStatus.OK).json(user);
     } catch (e: any) {
       res.status(HttpStatus.UNAUTHORIZED).json({

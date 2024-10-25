@@ -7,12 +7,16 @@ import {
   Post,
   Put,
   Query,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ReservasService } from './reservas.service';
 import { Response } from 'express';
 import { ReservaDto } from './dto/reservas.dto';
 import { ReservaPaginator } from './dto/reservas.paginator.dto';
+import { AdminGuard } from '@/guards/admin.guard';
+import { CustomRequest } from '@/common';
 
 @Controller('reservas')
 export class ReservasController {
@@ -31,10 +35,14 @@ export class ReservasController {
   }
 
   @Get()
+  @UseGuards(AdminGuard)
   async getAllFilter(
     @Query() paginator: ReservaPaginator,
     @Res() res: Response,
+    @Req() req: CustomRequest,
   ) {
+    paginator.casas = req.casas;
+    paginator.delegaciones = req.delegaciones;
     const result = await this.service.getAllFilter(paginator);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }

@@ -21,7 +21,7 @@ export class DelegacionesController {
   constructor(private readonly service: DelegacionesService) {}
 
   @Post()
-  async insert(@Body() data: DelegacionDto, @Res() res: Response) {
+  async insert(@Body() data: DelegacionDto[], @Res() res: Response) {
     const result = await this.service.insert(data);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }

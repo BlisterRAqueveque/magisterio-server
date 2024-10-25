@@ -1,4 +1,4 @@
-import { Paginator } from '@/common';
+import { CustomPaginator, Paginator } from '@/common';
 import {
   Body,
   Controller,
@@ -45,7 +45,10 @@ export class NoticiasController {
   }
 
   @Get()
-  async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
+  async getAllFilter(
+    @Query() paginator: CustomPaginator,
+    @Res() res: Response,
+  ) {
     const result = await this.service.getAllFilter(paginator);
 
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });

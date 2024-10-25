@@ -1,6 +1,7 @@
+import { PayloadDto } from '@/common';
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { UsuarioDto } from './usuarios/dto/usuarios.dto';
 
 @Injectable()
@@ -18,11 +19,11 @@ export class AuthService {
      * @description This params are for navigational permissions inside the API.
      *              Destructuring the token, gets the information.
      */
-    const payload = {
+    const payload: PayloadDto = {
       sub: user.id,
-      username: user.usuario,
-      name: user.nombre,
-      last_name: user.apellido,
+      usuario: user.usuario,
+      nombre: user.nombre,
+      apellido: user.apellido,
       //TODO Agregar el distrito la que pertenece
     };
     return this.jwtService.signAsync(payload);
@@ -71,7 +72,7 @@ export class AuthService {
    * @param jwt jwt from client
    * @returns boolean
    */
-  async verifyJwt(jwt: string): Promise<any> {
+  async verifyJwt(jwt: string): Promise<PayloadDto> {
     try {
       return await this.jwtService.verifyAsync(jwt);
     } catch (error) {

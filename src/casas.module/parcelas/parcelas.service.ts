@@ -18,6 +18,7 @@ import {
   Not,
   IsNull,
   QueryFailedError,
+  In,
 } from 'typeorm';
 import { Paginator } from '@/common';
 
@@ -68,11 +69,13 @@ export class ParcelasService {
 
   async getAllFilter(paginator: Paginator) {
     try {
-      const { id, nombre, page, perPage, sortBy } = paginator;
+      const { id, nombre, page, perPage, sortBy, casas } = paginator;
 
       const conditions: FindOptionsWhere<ParcelaDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);
+      //! Este filtro es para solo se vean las casas asignadas de los usuarios
+      if (casas) conditions.casa_mutual = { id: In(casas) };
 
       const [result, count] = await this.repo.findAndCount({
         where: conditions,
@@ -103,7 +106,7 @@ export class ParcelasService {
 
   async getOne(id: number) {
     try {
-      const result = await this.repo.findOne({  
+      const result = await this.repo.findOne({
         where: { id },
         relations: { casa_mutual: true },
       });
@@ -123,7 +126,7 @@ export class ParcelasService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
       //* Si no existe, no está autorizado
       if (!usuario) throw new UnauthorizedException('User not found');

@@ -11,11 +11,14 @@ import {
   Res,
   Headers,
   ParseIntPipe,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ParcelasService } from './parcelas.service';
 import { ParcelaDto } from './dto/parcelas.dto';
 import { Response } from 'express';
-import { Paginator } from '@/common';
+import { CustomRequest, Paginator } from '@/common';
+import { AdminGuard } from '@/guards/admin.guard';
 
 @Controller('parcelas')
 export class ParcelasController {
@@ -28,7 +31,14 @@ export class ParcelasController {
   }
 
   @Get()
-  async getAllFilter(@Query() paginator: Paginator, @Res() res: Response) {
+  @UseGuards(AdminGuard)
+  async getAllFilter(
+    @Query() paginator: Paginator,
+    @Res() res: Response,
+    @Req() req: CustomRequest,
+  ) {
+    paginator.casas = req.casas;
+    paginator.delegaciones = req.delegaciones;
     const result = await this.service.getAllFilter(paginator);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'Approved' });
   }

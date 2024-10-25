@@ -39,6 +39,8 @@ export class CasaMutualEntity {
   fecha_creado: Date;
   @Column({ type: 'bool', default: true })
   activo: boolean;
+  @Column({ type: 'text', nullable: true })
+  pautas: string;
 
   @DeleteDateColumn()
   borrado_el: Date;

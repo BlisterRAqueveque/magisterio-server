@@ -94,7 +94,7 @@ export class ConsejoDirectivoService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
 
       //* Buscamos la entidad para hacer merge

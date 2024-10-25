@@ -17,7 +17,7 @@ import {
 } from 'typeorm';
 import { NoticiaDto } from './dto/noticias.dto';
 import { NoticiaEntity } from './entity/noticias.entity';
-import { Paginator } from '@/common';
+import { CustomPaginator, Paginator } from '@/common';
 
 @Injectable()
 export class NoticiasService {
@@ -59,13 +59,14 @@ export class NoticiasService {
     }
   }
 
-  async getAllFilter(paginator: Paginator) {
+  async getAllFilter(paginator: CustomPaginator) {
     try {
-      const { id, nombre, page, perPage, sortBy } = paginator;
+      const { id, nombre, page, perPage, sortBy, activo } = paginator;
 
       const conditions: FindOptionsWhere<NoticiaDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.title = Like(`%${nombre}%`);
+      if (activo) conditions.activo = activo;
 
       const [result, count] = await this.repo.findAndCount({
         where: conditions,
@@ -111,7 +112,7 @@ export class NoticiasService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
 
       //* Buscamos la entidad para hacer merge

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Pendiente de Aprobación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header,
+        .footer {
+            text-align: center;
+            background-color: #0044cc;
+            color: white;
+            padding: 15px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            width: 300px;
+        }
+
+        .content {
+            z-index: 1;
+            position: relative;
+        }
+
+        .content p {
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="assets/Logo Mutual.png" alt="Logo" class="logo">
+
+        <div class="header">
+            <h1>Reserva Pendiente de Aprobación</h1>
+        </div>
+
+        <div class="content">
+            <p>Estimado/a <strong>{{ nombre }}</strong>,</p>
+            <p>Nos complace informarle que su solicitud de reserva ha sido recibida exitosamente y se encuentra
+                <strong>pendiente de aprobación</strong>. A continuación, le detallamos la información de la operación:
+            </p>
+            <ul>
+                <li><strong>Nº de Socio:</strong> {{ n_socio }}</li>
+                <li><strong>Nombre y Apellido:</strong> {{ nombre }}</li>
+                {{!-- <li><strong>DNI:</strong> {{ dni }}</li> --}}
+                <li><strong>Delegación:</strong> {{ delegacion }}</li>
+                <li><strong>Fecha y Hora de la Operación:</strong> {{ fecha }}</li>
+            </ul>
+            <p>La operación fue realizada correctamente, y dentro de poco recibirá un correo para confirmar su reserva.
+            </p>
+            <p>Agradecemos su paciencia y quedamos a su disposición para cualquier consulta.</p>
+        </div>
+
+        <div class="footer">
+            <p>Saludos cordiales,<br>El equipo de Mutual Magisterio</p>
+        </div>
+    </div>
+</body>
+
+</html>

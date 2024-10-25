@@ -11,6 +11,7 @@ import { HabitacionEntity } from './entity/habitaciones.entity';
 import { HabitacionDto } from './dto/habitaciones.dto';
 import {
   FindOptionsWhere,
+  In,
   IsNull,
   Like,
   Not,
@@ -63,11 +64,13 @@ export class HabitacionesService {
 
   async getAllFilter(paginator: Paginator) {
     try {
-      const { id, nombre, page, perPage, sortBy } = paginator;
+      const { id, nombre, page, perPage, sortBy, casas } = paginator;
 
       const conditions: FindOptionsWhere<HabitacionDto> = {};
       if (id) conditions.id = id;
       if (nombre) conditions.nombre = Like(`%${nombre}%`);
+      //! Este filtro es para solo se vean las casas asignadas de los usuarios
+      if (casas) conditions.casa_mutual = { id: In(casas) };
 
       const [result, count] = await this.repo.findAndCount({
         where: conditions,
@@ -83,37 +86,6 @@ export class HabitacionesService {
         },
       });
       return { result, count };
-
-      //! Creando contenido de prueba
-      //   const query = this.repo
-      //     .createQueryBuilder('habitacion')
-      //     .leftJoinAndSelect('habitacion.creado_por', 'creado_por')
-      //     .leftJoinAndSelect('habitacion.ediciones', 'ediciones')
-      //     .leftJoinAndSelect('habitacion.casa_mutual', 'casa_mutual');
-
-      //   if (id) {
-      //     query.andWhere('habitacion.id = :id', { id });
-      //   }
-
-      //   if (nombre) {
-      //     query.andWhere('habitacion.nombre LIKE :nombre', {
-      //       nombre: `%${nombre}%`,
-      //     });
-      //   }
-
-      //   if (sortBy) {
-      //     query.orderBy(
-      //       'habitacion.id',
-      //       sortBy.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-      //     );
-      //   }
-
-      //   query.skip(page !== undefined ? (page - 1) * perPage : 0);
-      //   query.take(perPage);
-
-      //   const [result, count] = await query.getManyAndCount();
-
-      //   return { result, count };
     } catch (err: any) {
       this.logger.error(err);
       if (err instanceof QueryFailedError)
@@ -128,7 +100,7 @@ export class HabitacionesService {
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
       const usuario = await this.usuarioService.getUserInfo(
-        decodedToken.username,
+        decodedToken.usuario,
       );
       //* Si no existe, no está autorizado
       if (!usuario) throw new UnauthorizedException('User not found');

@@ -92,7 +92,7 @@ export class ParcelasGateway
       socket.handshake.headers.authorization,
     );
     return decodedToken
-      ? await this.service.getUserInfo(decodedToken.username)
+      ? await this.service.getUserInfo(decodedToken.usuario)
       : null;
   }
 }

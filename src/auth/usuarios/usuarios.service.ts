@@ -167,6 +167,7 @@ export class UsuariosService {
         where: [{ usuario: usuario }, { correo: usuario }],
         relations: {
           casa_mutual: true,
+          delegacion: true,
         },
       });
       if (!user) throw new NotFoundException('Not found');
@@ -315,7 +316,7 @@ export class UsuariosService {
       //* Decodificamos el token para:
       const decodedToken = await this.auth.verifyJwt(token.split(' ')[1]);
       //* obtener el usuario
-      const usuario = await this.getUserInfo(decodedToken.username);
+      const usuario = await this.getUserInfo(decodedToken.usuario);
       //* Si no existe, no está autorizado
       if (!usuario) throw new UnauthorizedException('User not found');
       //* Buscamos la entidad para hacer merge

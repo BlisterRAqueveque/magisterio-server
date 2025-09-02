@@ -16,6 +16,7 @@ export class CasaMutualDto {
   cp: number;
   fecha_creado: Date;
   activo: boolean;
+  plazas: number;
 
   borrado_el: Date;
 

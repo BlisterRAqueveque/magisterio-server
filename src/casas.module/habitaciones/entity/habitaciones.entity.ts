@@ -23,6 +23,8 @@ export class HabitacionEntity {
   servicios: string[];
   @DeleteDateColumn()
   borrado_el: Date;
+  @Column({ type: 'int', nullable: true })
+  plazas: number;
   @Column({ type: 'bool', default: true })
   activo: boolean;
   @CreateDateColumn()

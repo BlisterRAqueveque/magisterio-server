@@ -354,4 +354,19 @@ export class ReservasService {
       data.habitacion
     );
   }
+
+  async getBySocioNumber(paginator: ReservaPaginator) {
+    const { id_delegacion, n_socio, desde, hasta } = paginator || {};
+    const item = await this.repo.findOne({
+      where: {
+        delegacion: { id: id_delegacion },
+        n_socio,
+        estado: 1,
+        desde: MoreThanOrEqual(new Date(desde)),
+        hasta: LessThanOrEqual(new Date(hasta)),
+      },
+    });
+
+    return item ? false : true;
+  }
 }

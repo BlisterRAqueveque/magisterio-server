@@ -300,6 +300,12 @@ export class UsuariosService {
         relations: { ediciones: true },
       });
       if (!entity) throw new NotFoundException('Entity not found');
+
+      if (data.clave) {
+        const hashPassword = await this.auth.hashPassword(data.clave);
+        data.clave = hashPassword;
+      }
+
       const merge = await this.repo.merge(entity, data);
       const result = await this.repo.save(merge);
       return result;

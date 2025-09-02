@@ -1,23 +1,23 @@
+import { CustomRequest, Paginator } from '@/common';
+import { AdminGuard } from '@/guards/admin.guard';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Headers,
   HttpStatus,
   Param,
   Post,
   Put,
   Query,
-  Headers,
+  Req,
   Res,
   UseGuards,
-  Req,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { CasasMutualesService } from './casas-mutuales.service';
 import { CasaMutualDto } from './dto/casas-mutuales.dto';
-import { Response, Request } from 'express';
-import { CustomRequest, Paginator } from '@/common';
-import { AdminGuard } from '@/guards/admin.guard';
 
 @Controller('casas-mutuales')
 export class CasasMutualesController {

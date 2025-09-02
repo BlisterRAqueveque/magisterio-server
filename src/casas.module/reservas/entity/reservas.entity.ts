@@ -24,6 +24,12 @@ export class ReservaEntity {
   tel: string;
   @Column({ type: 'varchar', nullable: false })
   correo: string;
+  @Column({
+    type: 'int',
+    nullable: false,
+    comment: '0: Efectivo, 1: Transferencia, 2: Débito, 3: Orden de compra',
+  })
+  tipoPago: number;
 
   @Column({ type: 'datetime', nullable: false })
   desde: Date;
@@ -39,6 +45,7 @@ export class ReservaEntity {
     comment: '0: Pendiente | 1: Aprobado | -1: Desaprobado',
   })
   estado: number;
+
   @Column({ type: 'datetime', nullable: true })
   fecha_aprobado: Date;
 

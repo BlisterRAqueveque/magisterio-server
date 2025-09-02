@@ -10,4 +10,6 @@ export class ReservaPaginator extends Paginator {
   usuario_aprobador: string;
   casa_mutual: string;
   delegacion: string;
+
+  id_delegacion: number;
 }

@@ -50,6 +50,10 @@ export class AppModule {
           method: RequestMethod.GET,
         },
         {
+          path: 'reservas/reserva/nSocio',
+          method: RequestMethod.GET,
+        },
+        {
           path: 'reservas',
           method: RequestMethod.POST,
         },

@@ -56,4 +56,15 @@ export class ReservasController {
     const result = await this.service.update(data, id);
     res.status(HttpStatus.OK).json({ ok: true, result, msg: 'approved' });
   }
+
+  @Get('reserva/nSocio')
+  async getBySocioNumber(
+    @Query() paginator: ReservaPaginator,
+    @Res() res: Response,
+  ) {
+    const puedeReservar = await this.service.getBySocioNumber(paginator);
+    res
+      .status(HttpStatus.OK)
+      .json({ ok: true, puedeReservar, msg: 'approved' });
+  }
 }
